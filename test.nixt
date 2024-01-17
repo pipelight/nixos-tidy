@@ -1,0 +1,13 @@
+# Usage
+# nix run github:nix-community/nixt -- test.nixt
+{
+  nixt,
+  pkgs ? import <nixpkgs> {},
+}: let
+  # utils = import ./default.nix;
+in
+  nixt.block ./default.nixt {
+    "Failing Test" = {
+      "always fails" = false;
+    };
+  }
