@@ -1,6 +1,11 @@
-# Nix Home-merger utilty for simpler home-manager
+# Nix utilties for home-manager.
+
+Manage users home from multiple flakes.
 
 ## Manage homes from flakes.
+
+You manage your **NixOs configuration** with **flakes and home-manager**.
+You want to import a flake that uses home-manager as well... **Error**.
 
 As of today, nix users can not declare "home-manager.users" multiple times. I
 haven't inspected the source code so I don't know why
@@ -9,8 +14,8 @@ haven't inspected the source code so I don't know why
 - maybe lib.mkMerge isn't possible due to internal architecture
 
 If you want to use **multiple** flakes that modify specific users homes through
-home-manager, You will get the error `option home-manager.user already declared`
-because of multiple usages of home-manager through your flakes,
+home-manager, you will get the error `option home-manager.user already declared`
+because of multiple usages of home-manager through your flakes.
 
 Here is a workaround with its helper functions
 
