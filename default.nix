@@ -11,11 +11,11 @@
   # For every home-manager module paths
   # example: "home.nix"
   # import and pass args
-    map
+    (map
     (
       rel_path: (import rel_path inheritage)
     )
-    home_files;
+    home_files);
 
   # Apply home modules to user list
   mkApplyHomes = home_modules: users: [
