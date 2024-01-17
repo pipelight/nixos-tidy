@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixt.url = "github.com/nix-community/nixt";
   };
 
   outputs = {nixpkgs, ...} @ inputs: let
