@@ -3,7 +3,9 @@
   pkgs,
   lib,
   inputs,
-}: {
+  cfg,
+}: let
+  homeManagerModule = inputs.home-manager.nixosModules.home-manager;
   # A Function to apply home.nix home-manager
   # configurations to multiple users
   # Args:
@@ -15,9 +17,7 @@
   # ```nix
   #  imports = [] ++ mkApplyHomes [(import ./a/home.nix)] ["anon"];
   # ```
-  mkApplyHomes = home_modules: apply_on_users: let
-    homeManagerModule = inputs.home-manager.nixosModules.home-manager;
-  in [
+  mkApplyHomes = home_modules: apply_on_users: [
     homeManagerModule
     {
       home-manager =
@@ -38,5 +38,12 @@
           apply_on_users
         );
     }
+  ];
+  # mkApplyHomes
+in {
+  imports = [
+    mkApplyHomes
+    cfg.modules
+    cfg.users
   ];
 }

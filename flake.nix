@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    home-manager.url = "github:nix-community/home-manager";
   };
 
   outputs = {nixpkgs, ...} @ inputs: let
@@ -16,11 +17,45 @@
         pkgs,
         lib,
         ...
-      }: {
-        imports = [
-          ./default.nix
-        ];
-      };
+      }:
+        with inputs;
+        with lib; let
+          # Shorter name to access final settings
+          cfg = config.services.home-merger;
+        in {
+          # Set the module options
+          options.services.developer = {
+            enable = mkOption {
+              type = with types; bool;
+              description = "Enable services";
+              default = true;
+            };
+            users = mkOption {
+              type = with types; listOf str;
+              description = ''
+                The name of the user for whome to add this module.
+              '';
+              default = ["anon"];
+            };
+            modules = mkOption {
+              type = with types; listOf inferred;
+              description = ''
+                The name of the user for whome to add this module.
+              '';
+              # default = ["anon"];
+            };
+          };
+
+          config = mkMerge [
+            (mkIf
+              cfg.enable
+              (
+                {}
+                // import
+                ./default.nix {inherit config pkgs lib utils inputs cfg;}
+              ))
+          ];
+        };
     };
   };
 }
