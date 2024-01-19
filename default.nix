@@ -2,7 +2,7 @@
   config,
   pkgs,
   lib,
-  input,
+  inputs,
 }: {
   # A Function to apply home.nix home-manager
   # configurations to multiple users
