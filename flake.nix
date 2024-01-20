@@ -24,9 +24,9 @@
           cfg = config.services.home-merger;
         in {
           # imports = [
-            #   import
-            # ./default.nix
-            #   {inherit config pkgs lib utils inputs;}
+          #   import
+          # ./default.nix
+          #   {inherit config pkgs lib utils inputs;}
           # ];
 
           # Set the module options
@@ -52,13 +52,13 @@
             };
           };
           config = mkMerge [
-            (mkIf
-              cfg.enable
-              (
-                {}
-                // import
-                ./terminal/default.nix {inherit config pkgs lib utils inputs cfg;}
-              ))
+            # (mkIf
+            #   cfg.enable
+            #   (
+            #     {}
+            #     // import
+            #     ./default.nix {inherit config pkgs lib utils inputs cfg;}
+            #   ))
             (mkIf
               cfg.enable
               (
