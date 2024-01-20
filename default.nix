@@ -4,12 +4,12 @@
   lib,
   inputs,
   ...
-}: 
-with lib;
-
-let
+}:
+with lib; let
   cfg = config.services.home-merger;
 
+in {
+  config = let 
   homeManagerModule = inputs.home-manager.nixosModules.home-manager;
   # A Function to apply home.nix home-manager
   # configurations to multiple users
@@ -44,8 +44,8 @@ let
         );
     }
   ];
-in {
-  config = mkMerge [
+
+  in [
     (mkIf
       cfg.enable
       (
