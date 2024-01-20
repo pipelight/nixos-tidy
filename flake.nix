@@ -63,9 +63,7 @@
               cfg.enable
               (
                 let
-                  homeManagerModule =
-                    {} // import inputs.home-manager.nixosModules.home-manager
-                    {inherit config pkgs lib utils;};
+                  homeManagerModule = inputs.home-manager.nixosModules.home-manager;
                 in
                   homeManagerModule
                   # A Function to apply home.nix home-manager
