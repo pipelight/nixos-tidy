@@ -23,11 +23,11 @@
           # Shorter name to access final settings
           cfg = config.services.home-merger;
         in {
-          # imports = [
+          imports = [
           #   import
-          #   ./default.nix
+            ./default.nix
           #   {inherit config pkgs lib utils inputs;}
-          # ];
+          ];
 
           # Set the module options
           options.services.home-merger = {
