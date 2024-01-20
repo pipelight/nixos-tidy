@@ -91,7 +91,7 @@
                         value = {
                           ${u} = {
                             home.stateVersion = "24.05";
-                            imports = cfg.modules;
+                            # imports = cfg.modules;
                           };
                         };
                       })
