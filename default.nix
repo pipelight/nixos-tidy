@@ -9,10 +9,11 @@
 with lib; let
   cfg = config.services.home-merger;
 in {
-  config = mkMerge [
-    (mkIf
+  config = 
+    mkIf
       cfg.enable
-      {} // (
+      {}
+      // (
         inputs.home-manager.nixosModules.home-manager
         # A Function to apply home.nix home-manager
         # configurations to multiple users
@@ -44,7 +45,8 @@ in {
               cfg.users
             );
         }
-      ))
+      );
+}
     # (mkIf
     #   cfg.enable
     #   (
@@ -88,5 +90,3 @@ in {
     #       cfg.modules
     #       cfg.users
     #   ))
-  ];
-}
