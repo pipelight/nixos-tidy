@@ -103,6 +103,7 @@
                       cfg.users
                     );
                 }
+                {inherit cfg;}
               ))
           ];
         };
