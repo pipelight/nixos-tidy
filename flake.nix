@@ -25,7 +25,7 @@
         with inputs;
         with lib; let
           # Shorter name to access final settings
-          homeManagerModule = home-manager.nixosModules.home-manager;
+          # homeManagerModule = home-manager.nixosModules.home-manager;
           cfg = config.services.home-merger;
         in {
           # imports = [
@@ -64,10 +64,9 @@
             #     // import
             #     ./default.nix {inherit config pkgs lib utils inputs cfg;}
             #   ))
-            (mkIf
-              cfg.enable
-              (
-                homeManagerModule
+            # (mkIf
+            #   cfg.enable
+            #   (
                 # A Function to apply home.nix home-manager
                 # configurations to multiple users
                 # Args:
@@ -79,26 +78,27 @@
                 # ```nix
                 #  imports = [] ++ mkApplyHomes [(import ./a/home.nix)] ["anon"];
                 # ```
-                {
-                  home-manager =
-                    {
-                      useGlobalPkgs = true;
-                      extraSpecialArgs = {inherit inputs;};
-                    }
-                    // builtins.listToAttrs (
-                      builtins.map (u: {
-                        name = "users";
-                        value = {
-                          ${u} = {
-                            home.stateVersion = "24.05";
-                            imports = cfg.modules;
-                          };
-                        };
-                      })
-                      cfg.users
-                    );
-                }
-              ))
+                # homeManagerModule
+                # {
+                #   home-manager =
+                #     {
+                #       useGlobalPkgs = true;
+                #       extraSpecialArgs = {inherit inputs;};
+                #     }
+                #     // builtins.listToAttrs (
+                #       builtins.map (u: {
+                #         name = "users";
+                #         value = {
+                #           ${u} = {
+                #             home.stateVersion = "24.05";
+                #             imports = cfg.modules;
+                #           };
+                #         };
+                #       })
+                #       cfg.users
+                #     );
+                # }
+              # ))
           ];
         };
     };
