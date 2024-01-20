@@ -24,7 +24,7 @@
           cfg = config.services.home-merger;
         in {
           imports = [
-            ./default.nix
+            import (./default.nix {inherit config pkgs lib utils inputs;})
           ];
 
           # Set the module options
