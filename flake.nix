@@ -14,10 +14,8 @@
       # Default module
       default = {
         config,
-        lib,
         pkgs,
-        utils,
-        inputs,
+        lib,
         ...
       }:
         with inputs;
