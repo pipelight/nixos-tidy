@@ -4,7 +4,10 @@
   lib,
   inputs,
   ...
-}: let
+}: 
+with lib;
+
+let
   cfg = config.services.home-merger;
 
   homeManagerModule = inputs.home-manager.nixosModules.home-manager;
@@ -43,12 +46,12 @@
   ];
 in {
   config = mkMerge [
-            (mkIf
-              cfg.enable
-              (
-                mkApplyHomes
-                cfg.modules
-                cfg.users
-              ))
-          ];
+    (mkIf
+      cfg.enable
+      (
+        mkApplyHomes
+        cfg.modules
+        cfg.users
+      ))
+  ];
 }
