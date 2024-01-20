@@ -13,7 +13,6 @@
   outputs = {nixpkgs, ...} @ inputs: let
     system = "x86_64-linux";
     pkgs = nixpkgs;
-    homeManagerModule = inputs.home-manager.nixosModules.home-manager;
   in {
     nixosModules = {
       # Default module
@@ -26,6 +25,7 @@
         with inputs;
         with lib; let
           # Shorter name to access final settings
+    homeManagerModule = home-manager.nixosModules.home-manager;
           cfg = config.services.home-merger;
         in {
           # imports = [
