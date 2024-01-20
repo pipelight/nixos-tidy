@@ -23,11 +23,11 @@
           # Shorter name to access final settings
           cfg = config.services.home-merger;
         in {
-          imports = [
-            import
-            ./default.nix
-            {inherit config pkgs lib utils inputs;}
-          ];
+          # imports = [
+          #   import
+          #   ./default.nix
+          #   {inherit config pkgs lib utils inputs;}
+          # ];
 
           # Set the module options
           options.services.home-merger = {
@@ -36,13 +36,13 @@
               description = "Enable services";
               default = true;
             };
-            users = mkOption {
-              type = with types; listOf str;
-              description = ''
-                The name of the user for whome to add this module.
-              '';
-              default = ["anon"];
-            };
+            # users = mkOption {
+            #   type = with types; listOf str;
+            #   description = ''
+            #     The name of the user for whome to add this module.
+            #   '';
+            #   default = ["anon"];
+            # };
             # modules = mkOption {
             #   type = with types; listOf inferred;
             #   description = ''
