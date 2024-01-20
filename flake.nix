@@ -62,7 +62,11 @@
             (mkIf
               cfg.enable
               (
-                inputs.home-manager.nixosModules.home-manager
+              let
+                homeManagerModule = import inputs.home-manager.nixosModules.home-manager 
+                {inherit config pkgs lib utils inputs cfg;};
+              in
+              homeManagerModule
                 # A Function to apply home.nix home-manager
                 # configurations to multiple users
                 # Args:
