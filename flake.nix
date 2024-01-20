@@ -64,9 +64,9 @@
             #     // import
             #     ./default.nix {inherit config pkgs lib utils inputs cfg;}
             #   ))
-            # (mkIf
-            #   cfg.enable
-            #   (
+            (mkIf
+              cfg.enable
+              (
             # A Function to apply home.nix home-manager
             # configurations to multiple users
             # Args:
@@ -78,27 +78,27 @@
             # ```nix
             #  imports = [] ++ mkApplyHomes [(import ./a/home.nix)] ["anon"];
             # ```
-            # homeManagerModule
-            # {
-            #   home-manager =
-            #     {
-            #       useGlobalPkgs = true;
-            #       extraSpecialArgs = {inherit inputs;};
-            #     }
-            #     // builtins.listToAttrs (
-            #       builtins.map (u: {
-            #         name = "users";
-            #         value = {
-            #           ${u} = {
-            #             home.stateVersion = "24.05";
-            #             imports = cfg.modules;
-            #           };
-            #         };
-            #       })
-            #       cfg.users
-            #     );
-            # }
-            # ))
+            homeManagerModule
+            {
+              home-manager =
+                {
+                  useGlobalPkgs = true;
+                  extraSpecialArgs = {inherit inputs;};
+                }
+                // builtins.listToAttrs (
+                  builtins.map (u: {
+                    name = "users";
+                    value = {
+                      ${u} = {
+                        home.stateVersion = "24.05";
+                        imports = cfg.modules;
+                      };
+                    };
+                  })
+                  cfg.users
+                );
+            }
+            ))
           ];
         };
     };
