@@ -21,14 +21,14 @@
         with inputs;
         with lib; let
           # Shorter name to access final settings
-          cfg = config.home-merger;
+          cfg = config.services.home-merger;
         in {
           imports = [
             ./default.nix
           ];
 
           # Set the module options
-          options.home-merger = {
+          options.services.home-merger = {
             enable = mkOption {
               type = with types; bool;
               description = "Enable services";
