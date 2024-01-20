@@ -10,10 +10,11 @@
     };
   };
 
-  outputs = {nixpkgs,
-
+  outputs = {
+    nixpkgs,
     home-manager,
-  ...} @ inputs: let
+    ...
+  } @ inputs: let
     system = "x86_64-linux";
     pkgs = nixpkgs;
   in {
@@ -94,6 +95,7 @@
                         value = {
                           ${u} = {
                             home.stateVersion = "24.05";
+                            imports = [];
                             # imports = cfg.modules;
                           };
                         };
