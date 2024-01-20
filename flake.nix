@@ -2,7 +2,8 @@
   description = "Nix modules for home-manager utility functions";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-stable";
+    # nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -25,7 +26,7 @@
         with lib; let
           # Shorter name to access final settings
           # homeManagerModule = home-manager.nixosModules.home-manager;
-          cfg = config.services.home-merger;
+          cfg = config.home-merger;
         in {
           # imports = [
           #   import
@@ -34,7 +35,7 @@
           # ];
 
           # Set the module options
-          options.services.home-merger = {
+          options.home-merger = {
             enable = mkOption {
               type = with types; bool;
               description = "Enable services";
@@ -48,7 +49,7 @@
               default = ["anon"];
             };
             modules = mkOption {
-              type = with types; listOf inferred;
+              type = with types; listOf str;
               description = ''
                 The name of the user for whome to add this module.
               '';
