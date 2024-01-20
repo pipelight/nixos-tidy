@@ -107,6 +107,7 @@
           ];
 
           imports = [
+          mkIf (cfg.enable(
             homeManagerModule
             {
               home-manager =
@@ -120,14 +121,14 @@
                     value = {
                       ${u} = {
                         home.stateVersion = "24.05";
-                        imports = [];
-                        # imports = cfg.modules;
+                        # imports = [];
+                        imports = cfg.modules;
                       };
                     };
                   })
                   cfg.users
                 );
-            }
+            }))
           ];
         };
     };
