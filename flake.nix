@@ -103,7 +103,7 @@
                       cfg.users
                     );
                 }
-                {inherit cfg;}
+                {inherit pkgs cfg;}
               ))
           ];
         };
