@@ -2,7 +2,7 @@
   description = "Nix modules for home-manager utility functions";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-stable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     # nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -49,7 +49,7 @@
               default = ["anon"];
             };
             modules = mkOption {
-              type = with types; listOf str;
+              type = with types; listOf inferred;
               description = ''
                 The name of the user for whome to add this module.
               '';
