@@ -6,7 +6,7 @@
 
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.pkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -25,7 +25,7 @@
         with inputs;
         with lib; let
           # Shorter name to access final settings
-    homeManagerModule = home-manager.nixosModules.home-manager;
+          homeManagerModule = home-manager.nixosModules.home-manager;
           cfg = config.services.home-merger;
         in {
           # imports = [
