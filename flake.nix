@@ -107,30 +107,27 @@
           ];
 
           imports = [
-            mkIf
-            (cfg.enable
-              homeManagerModule
-              {
-                home-manager =
-                  {
-                    useGlobalPkgs = false;
-                    extraSpecialArgs = {inherit system inputs;};
-                  }
-                  // builtins.listToAttrs (
-                    builtins.map (u: {
-                      name = "users";
-                      value = {
-                        ${u} = {
-                          home.stateVersion = "24.05";
-                          # imports = [];
-                          imports = cfg.modules;
-                        };
+            homeManagerModule
+            {
+              home-manager =
+                {
+                  useGlobalPkgs = false;
+                  extraSpecialArgs = {inherit system inputs;};
+                }
+                // builtins.listToAttrs (
+                  builtins.map (u: {
+                    name = "users";
+                    value = {
+                      ${u} = {
+                        home.stateVersion = "24.05";
+                        # imports = [];
+                        imports = cfg.modules;
                       };
-                    })
-                    cfg.users
-                  );
-              }
-            )
+                    };
+                  })
+                  cfg.users
+                );
+            }
           ];
         };
     };
