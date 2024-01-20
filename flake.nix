@@ -23,6 +23,7 @@
           # Shorter name to access final settings
           cfg = config.services.home-merger;
         in {
+
           imports = [
             ./default.nix
           ];
@@ -49,23 +50,6 @@
               # default = ["anon"];
             };
           };
-
-          config = mkMerge [
-            (mkIf
-              cfg.enable
-              (
-                {}
-                // import
-                ./default.nix {inherit config pkgs lib utils inputs cfg;}
-              ))
-            (mkIf
-              cfg.enable
-              (
-                mkApplyHomes
-                cfg.modules
-                cfg.users
-              ))
-          ];
         };
     };
   };
