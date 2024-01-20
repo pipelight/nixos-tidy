@@ -9,6 +9,7 @@
   outputs = {nixpkgs, ...} @ inputs: let
     system = "x86_64-linux";
     pkgs = nixpkgs;
+    homeManagerModule = inputs.home-manager.nixosModules.home-manager;
   in {
     nixosModules = {
       # Default module
@@ -62,9 +63,6 @@
             (mkIf
               cfg.enable
               (
-                let
-                  homeManagerModule = inputs.home-manager.nixosModules.home-manager;
-                in
                   homeManagerModule
                   # A Function to apply home.nix home-manager
                   # configurations to multiple users
