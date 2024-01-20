@@ -12,7 +12,7 @@ in {
   config = mkMerge [
     (mkIf
       cfg.enable
-      (
+      {} // (
         inputs.home-manager.nixosModules.home-manager
         # A Function to apply home.nix home-manager
         # configurations to multiple users
