@@ -14,8 +14,10 @@
       # Default module
       default = {
         config,
-        pkgs,
         lib,
+        pkgs,
+        utils,
+        inputs,
         ...
       }:
         with inputs;
@@ -23,7 +25,6 @@
           # Shorter name to access final settings
           cfg = config.services.home-merger;
         in {
-
           imports = [
             ./default.nix
           ];
