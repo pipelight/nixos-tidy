@@ -17,6 +17,7 @@
   # ```nix
   #  imports = [] ++ mkApplyHomes [(import ./a/home.nix)] ["anon"];
   # ```
+  in {
   mkApplyHomes = home_modules: apply_on_users: [
     homeManagerModule
     {
@@ -40,10 +41,4 @@
     }
   ];
   # mkApplyHomes
-in {
-  imports = [
-    mkApplyHomes
-    cfg.modules
-    cfg.users
-  ];
 }
