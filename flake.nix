@@ -25,7 +25,7 @@
         in {
           imports = [
             import
-            (./default.nix {inherit config pkgs lib utils inputs;})
+              ./default.nix {inherit config pkgs lib utils inputs;}
           ];
 
           # Set the module options
@@ -50,7 +50,6 @@
               default = [];
             };
           };
-
         };
     };
   };
