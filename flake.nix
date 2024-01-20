@@ -83,7 +83,7 @@
                   home-manager =
                     {
                       useGlobalPkgs = true;
-                      extraSpecialArgs = {inherit inputs system;};
+                      extraSpecialArgs = {inherit pkgs inputs system;};
                     }
                     // builtins.listToAttrs (
                       builtins.map (u: {
