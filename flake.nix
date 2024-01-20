@@ -53,7 +53,7 @@
               default = ["anon"];
             };
             modules = mkOption {
-              type = with types; listOf inferred;
+              # type = with types; listOf inferred;
               description = ''
                 The name of the user for whome to add this module.
               '';
