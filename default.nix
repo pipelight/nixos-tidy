@@ -3,8 +3,10 @@
   pkgs,
   lib,
   inputs,
-  cfg,
+  ...
 }: let
+  cfg = config.services.home-merger;
+
   homeManagerModule = inputs.home-manager.nixosModules.home-manager;
   # A Function to apply home.nix home-manager
   # configurations to multiple users
@@ -17,7 +19,6 @@
   # ```nix
   #  imports = [] ++ mkApplyHomes [(import ./a/home.nix)] ["anon"];
   # ```
-  in {
   mkApplyHomes = home_modules: apply_on_users: [
     homeManagerModule
     {
@@ -40,5 +41,14 @@
         );
     }
   ];
-  # mkApplyHomes
+in {
+  config = mkMerge [
+            (mkIf
+              cfg.enable
+              (
+                mkApplyHomes
+                cfg.modules
+                cfg.users
+              ))
+          ];
 }
