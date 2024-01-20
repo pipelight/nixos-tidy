@@ -24,7 +24,8 @@
           cfg = config.services.home-merger;
         in {
           imports = [
-            import (./default.nix {inherit config pkgs lib utils inputs;})
+            import
+            (./default.nix {inherit config pkgs lib utils inputs;})
           ];
 
           # Set the module options
@@ -41,13 +42,12 @@
               '';
               default = ["anon"];
             };
-            modules = mkOption {
-              type = with types; listOf inferred;
-              description = ''
-                The name of the user for whome to add this module.
-              '';
-              # default = ["anon"];
-            };
+            # modules = mkOption {
+            #   type = with types; listOf inferred;
+            #   description = ''
+            #     The name of the user for whome to add this module.
+            #   '';
+            # };
           };
         };
     };
