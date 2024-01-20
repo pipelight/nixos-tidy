@@ -3,7 +3,11 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    home-manager.url = "github:nix-community/home-manager";
+
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {nixpkgs, ...} @ inputs: let
@@ -63,37 +67,37 @@
             (mkIf
               cfg.enable
               (
-                  homeManagerModule
-                  # A Function to apply home.nix home-manager
-                  # configurations to multiple users
-                  # Args:
-                  # - home_modules; a list of home-manager modules "home.nix" files,
-                  # - apply_on_users; a list of usernames
-                  # Return
-                  # - a list of modules
-                  # Usage:
-                  # ```nix
-                  #  imports = [] ++ mkApplyHomes [(import ./a/home.nix)] ["anon"];
-                  # ```
-                  {
-                    home-manager =
-                      {
-                        useGlobalPkgs = true;
-                        extraSpecialArgs = {inherit inputs;};
-                      }
-                      // builtins.listToAttrs (
-                        builtins.map (u: {
-                          name = "users";
-                          value = {
-                            ${u} = {
-                              home.stateVersion = "24.05";
-                              imports = cfg.modules;
-                            };
+                homeManagerModule
+                # A Function to apply home.nix home-manager
+                # configurations to multiple users
+                # Args:
+                # - home_modules; a list of home-manager modules "home.nix" files,
+                # - apply_on_users; a list of usernames
+                # Return
+                # - a list of modules
+                # Usage:
+                # ```nix
+                #  imports = [] ++ mkApplyHomes [(import ./a/home.nix)] ["anon"];
+                # ```
+                {
+                  home-manager =
+                    {
+                      useGlobalPkgs = true;
+                      extraSpecialArgs = {inherit inputs;};
+                    }
+                    // builtins.listToAttrs (
+                      builtins.map (u: {
+                        name = "users";
+                        value = {
+                          ${u} = {
+                            home.stateVersion = "24.05";
+                            imports = cfg.modules;
                           };
-                        })
-                        cfg.users
-                      );
-                  }
+                        };
+                      })
+                      cfg.users
+                    );
+                }
               ))
           ];
         };
