@@ -64,7 +64,7 @@
               (
                 let
                   homeManagerModule =
-                    import inputs.home-manager.nixosModules.home-manager
+                    {} // import inputs.home-manager.nixosModules.home-manager
                     {inherit config pkgs lib utils;};
                 in
                   homeManagerModule
