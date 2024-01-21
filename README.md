@@ -1,65 +1,114 @@
-# Nix utilties for home-manager.
+# Home-merger: Split home-manager declarations in their related flakes.
 
 Manage users home from multiple flakes.
 
-## Manage homes from flakes.
+> [!IMPORTANT]\
+> Beta, Works like a charm but lacks flexibility.
 
-You manage your **NixOs configuration** with **flakes and home-manager**.
-You want to import a flake that uses home-manager as well... **Error**.
+## Manage homes from mutltiple flakes.
 
-As of today, nix users can not declare "home-manager.users" multiple times. I
-haven't inspected the source code so I don't know why
+### The problem...
 
-- maybe the option is defined as unique
-- maybe lib.mkMerge isn't possible due to internal architecture
+You manage your **NixOs configuration** with **flakes and home-manager**. You
+want to import a flake that uses home-manager as well... **Error**.
 
-If you want to use **multiple** flakes that modify specific users homes through
-home-manager, you will get the error `option home-manager.user already declared`
-because of multiple usages of home-manager through your flakes.
+As of today, nix users can not declare `home-manager.users` multiple times
+through configuration files. If you want to use **multiple** flakes that modify
+specific users homes through home-manager, you will get the error
+`option home-manager.user already declared`.
 
-Here is a workaround with its helper functions
+### A solution
 
-1. Do not apply changes from inside the flake! But export home modules from your
-   flakes.
+The home-merger flake is a way to circumvent this restriction.
+
+It adds an option set to your configuration that you can use multiple times to
+import home-manager modules for specific users.
 
 ```nix
-# Declare a "home" module in Nix flake outputs
+home-merger = {
+    # A list of user name for which to apply the modules
+    users = ["alice", "bob"];
+    # A list of modules to be applied
+    modules= [./home.nix];
+}
+```
 
+## Usage
+
+### Standalone
+
+You can begin to use it standalone in a default.nix file.
+
+```nix
+# default.nix
+{
+    pkgs,
+    lib,
+    inputs,
+    ...
+}:{
+    home-merger = {
+        # A list of user name
+        users = ["alice", "bob"];
+        # A list of modules
+        modules= [./home.nix];
+    }
+}
+```
+
+This is pragmatic but doesn't allow for much cohesion between home.nix files.
+Here we want to see **which users has which modules enabled at glance.** So we
+will use the flake style.
+
+### Flake style
+
+Let's say you split your flakes into three files.
+
+This flake is related to **networking things**. You want to separate concerns.
+
+
+```sh
+my-network-flake
+├── default.nix
+├── flake.nix
+└── home.nix
+```
+
+```nix
+# default.nix
+{
+    pkgs,
+    lib,
+    inputs,
+    cfg, # Passes the arguments (modules and users) to the home.nix file
+    ...
+}:{
+    home-merger = {
+        # A list of user name
+        users = cfg.users;
+        # A list of modules
+        modules= [./home.nix];
+    }
+}
+```
+
+```nix
+# flake.nix (truncated file)
 outputs = {
     nixosModules = {
-      # Set the exported module name.
-      home = {
+      default = {
         config,
         pkgs,
         lib,
         ...
       }: {
-        imports = with utils; mKMergeHomes [./a/home.nix ./b/home.nix] { inherit stuffs };
-
-        # shorthand for
         imports = [ 
-            (import ./a/home.nix { inherit stuffs });
+            # This ugly import statement is essential to pass the "cfg" set
+            # to downstream modules
+            # without raising an "infifite recursion" error.
+            (import ./default.nix { inherit config pkgs lib utils inputs cfg});
         ]
-
-        # or without inheritence
-        imports = with utils; [./terminal/home.nix ./git/home.nix];
       }
     }
-}
+};
 ```
-
-2. Then merge "home" modules in a top flake and apply the modules to a user or
-   user list.
-
-## Usage
-
-```nix
-home_modules = mkMergeHomes 
-    [./a/home.nix ./b/home.nix ] 
-    {inherit config pkgs lib inputs cfg;} ;
-
-mkApplyHomes home_modules ["username" ];
-```
-
-A function to merge home files and apply them to a list of users merge_homes [
-homeManagerModule1, homeManagerModule2 ]
