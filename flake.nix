@@ -36,17 +36,28 @@
           options.home-merger = {
             users = mkOption {
               type = with types; listOf str;
+              default = [];
+              example = literalExpression "{ inherit emacs-overlay; }";
               description = ''
-                The name of the user for whome to add this module.
+                The name of users for whome to add this module.
               '';
-              default = ["anon"];
             };
             extraSpecialArgs = mkOption {
+              type = with types; attrs;
+              default = {};
+              example = literalExpression "{ inherit emacs-overlay; }";
               # type = with types; listOf inferred;
               description = ''
-                Extra args to pass to home-manager (ex: {inherit cfg input;})
+                Extra `specialArgs` passed to Home Manager. This
+                option can be used to pass additional arguments to all modules.
               '';
+            };
+            modules = mkOption {
+              type = with types; listOf raw;
               default = [];
+              description = ''
+                Modules to add to the user configuration.
+              '';
             };
           };
           imports = [
@@ -55,7 +66,7 @@
               home-manager =
                 {
                   useGlobalPkgs = false;
-                  extraSpecialArgs = cfg.extraSpecialArgs;
+                  extraSpecialArgs = {inherit system inputs;};
                 }
                 // builtins.listToAttrs (
                   builtins.map (u: {
