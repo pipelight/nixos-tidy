@@ -37,7 +37,7 @@
             users = mkOption {
               type = with types; listOf str;
               default = [];
-              example = literalExpression "{ inherit emacs-overlay; }";
+              example = literalExpression "[\"alice\",\"bob\"]";
               description = ''
                 The name of users for whome to add this module.
               '';
@@ -55,6 +55,7 @@
             modules = mkOption {
               type = with types; listOf raw;
               default = [];
+              example = literalExpression "[ ./home.nix, otherModule ]";
               description = ''
                 Modules to add to the user configuration.
               '';
