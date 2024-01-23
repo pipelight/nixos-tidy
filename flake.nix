@@ -41,10 +41,10 @@
               '';
               default = ["anon"];
             };
-            modules = mkOption {
+            extraSpecialArgs = mkOption {
               # type = with types; listOf inferred;
               description = ''
-                The name of the user for whome to add this module.
+                Extra args to pass to home-manager (ex: {inherit cfg input;})
               '';
               default = [];
             };
@@ -55,7 +55,7 @@
               home-manager =
                 {
                   useGlobalPkgs = false;
-                  extraSpecialArgs = {inherit system inputs;};
+                  extraSpecialArgs = cfg.extraSpecialArgs;
                 }
                 // builtins.listToAttrs (
                   builtins.map (u: {
