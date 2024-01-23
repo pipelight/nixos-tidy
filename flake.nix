@@ -34,6 +34,10 @@
         in {
           # Set the module options
           options.home-merger = {
+            enable = mkEnableOption ''
+              Wether to enable thos modules for the specified users'.
+            '';
+
             users = mkOption {
               type = with types; listOf str;
               default = [];
