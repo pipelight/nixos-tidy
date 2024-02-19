@@ -75,6 +75,7 @@ More detailes below.
 Cherry pick the unfree software you want to allow
 
 ```nix
+#home.nix
 allow-unfree = [
     # use regexes
     "nvidia"
