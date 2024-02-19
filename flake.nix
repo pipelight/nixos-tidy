@@ -1,12 +1,9 @@
 {
   description = "Nixos modules utilities";
 
-  inputs = {
+  inputs = rec {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    home-manager.url = "github:nix-community/home-manager";
   };
 
   outputs = {
