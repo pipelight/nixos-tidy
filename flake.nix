@@ -18,8 +18,8 @@
     pkgs = nixpkgs;
   in {
     nixosModules = {
-      home-merger = pkgs.callPackage ./home-merger.nix {};
-      allow-unfree = pkgs.callPackage ./allow-unfree.nix {};
+      home-merger = ./home-merger.nix;
+      allow-unfree = ./allow-unfree.nix;
     };
   };
 }
