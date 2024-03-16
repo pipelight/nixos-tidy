@@ -1,9 +1,7 @@
 {
   config,
-  pkgs,
   lib,
   inputs,
-  ...
 }:
 with inputs;
 with lib; let
