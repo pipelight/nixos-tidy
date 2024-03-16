@@ -32,7 +32,7 @@ in {
         '';
       };
       modules = mkOption {
-        type = with types; listOf anything;
+        type = with types; listOf raw;
         default = [];
         example = literalExpression "[ ./home.nix, otherModule ]";
         description = ''
@@ -42,7 +42,7 @@ in {
     };
   };
 
-  config = [
+  config = 
     homeManagerModule
     {
       home-manager =
@@ -63,5 +63,5 @@ in {
           cfg.users
         );
     }
-  ];
+  ;
 }
