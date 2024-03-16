@@ -9,6 +9,7 @@
   outputs = {
     nixpkgs,
     home-manager,
+    ...
   }: {
     nixosModules = {
       home-merger = ./home-merger.nix;
