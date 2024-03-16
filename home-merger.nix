@@ -42,7 +42,8 @@ in {
     };
   };
 
-  config = 
+  config = {
+  imports = [
     homeManagerModule
     {
       home-manager =
@@ -63,5 +64,6 @@ in {
           cfg.users
         );
     }
-  ;
+  ];
+  };
 }
