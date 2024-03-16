@@ -7,10 +7,10 @@
   };
 
   outputs = {
+    self,
     nixpkgs,
-    home-manager,
     ...
-  }: {
+  }@ inputs:{
     nixosModules = {
       home-merger = ./home-merger.nix;
       allow-unfree = ./allow-unfree.nix;
