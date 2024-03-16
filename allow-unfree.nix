@@ -2,11 +2,11 @@
   config,
   lib,
   ...
-}:
- let
+}: let
   cfg = config.allow-unfree;
 in {
-  options = with lib;{
+  # Set the module options
+  options = with lib; {
     allow-unfree = mkOption {
       default = [];
       type = with types; listOf str;

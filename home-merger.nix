@@ -41,6 +41,7 @@ in {
       };
     };
   };
+  config = {
   imports = [
     homeManagerModule
     {
@@ -63,4 +64,5 @@ in {
         );
     }
   ];
+            };
 }
