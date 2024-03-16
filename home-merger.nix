@@ -2,6 +2,7 @@
   config,
   lib,
   inputs,
+  ...
 }:
 with inputs;
 with lib; let
