@@ -24,8 +24,7 @@ in {
       extraSpecialArgs = mkOption {
         type = with types; attrs;
         default = {};
-        example = literalExpression "{ inherit emacs-overlay; }";
-        # type = with types; listOf inferred;
+        example = literalExpression "{ inherit inputs; }";
         description = ''
           Extra `specialArgs` passed to Home Manager. This
           option can be used to pass additional arguments to all modules.
@@ -43,27 +42,27 @@ in {
   };
 
   config = {
-  imports = [
-    homeManagerModule
-    {
-      home-manager =
-        {
-          useGlobalPkgs = false;
-          extraSpecialArgs = cfg.extraSpecialArgs;
-        }
-        // builtins.listToAttrs (
-          builtins.map (u: {
-            name = "users";
-            value = {
-              ${u} = {
-                home.stateVersion = "24.05";
-                imports = cfg.modules;
+    imports = [
+      homeManagerModule
+      {
+        home-manager =
+          {
+            useGlobalPkgs = false;
+            extraSpecialArgs = cfg.extraSpecialArgs;
+          }
+          // builtins.listToAttrs (
+            builtins.map (u: {
+              name = "users";
+              value = {
+                ${u} = {
+                  home.stateVersion = "24.05";
+                  # imports = cfg.modules;
+                };
               };
-            };
-          })
-          cfg.users
-        );
-    }
-  ];
+            })
+            cfg.users
+          );
+      }
+    ];
   };
 }
