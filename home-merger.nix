@@ -1,15 +1,16 @@
 {
   config,
   lib,
-  home-manager,
+  inputs,
   ...
 }:
-with lib; let
-  homeManagerModule = home-manager.nixosModules.home-manager;
+let
+
+  homeManagerModule = inputs.home-manager.nixosModules.home-manager;
   cfg = config.home-merger;
 in {
   # Set the module options
-  options = {
+  options = with lib;{
     home-merger = {
       enable = mkEnableOption ''
         Wether to enable thos modules for the specified users'.

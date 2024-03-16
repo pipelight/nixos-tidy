@@ -2,14 +2,14 @@
   config,
   lib,
   ...
-}: let
-  inherit (lib) mkOption types;
+}:
+ let
   cfg = config.allow-unfree;
 in {
-  options = {
+  options = with lib;{
     allow-unfree = mkOption {
       default = [];
-      type = types.listOf types.str;
+      type = with types; listOf str;
       description = "List of unfree packages allowed to be installed";
       example = lib.literalExpression ''[ "steam" ]'';
     };
