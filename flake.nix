@@ -7,8 +7,8 @@
   };
 
   outputs = {
+    self,
     nixpkgs,
-    home-manager,
     ...
   } @ inputs: {
     nixosModules = {
