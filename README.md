@@ -19,7 +19,7 @@ Use flakes.
     ...
   } @ inputs: let
     homeMergerModule = nixos-utils.nixosModules.home-merger;
-    allowUnfreeModule = nixos-utils.nixosModules.home-merger;
+    allowUnfreeModule = nixos-utils.nixosModules.allow-unfree;
   in {
       nixosConfiguration = { 
       crocuda = pkgs.lib.nixosSystem {
@@ -75,7 +75,7 @@ More detailes below.
 Cherry pick the unfree software you want to allow
 
 ```nix
-#home.nix
+#default.nix
 allow-unfree = [
     # use regexes
     "nvidia"
