@@ -5,7 +5,6 @@
   ...
 }: let
   homeManagerModule = inputs.home-manager.nixosModules.home-manager;
-  cfg = config.home-merger;
 in {
   # Set the module options
   options = with lib; {
@@ -41,28 +40,38 @@ in {
       };
     };
   };
-  config = {
+
   imports = [
-    homeManagerModule
-    {
-      home-manager =
+    ({
+      config,
+      lib,
+      ...
+    }: let
+      cfg = config.home-merger;
+    in {
+      imports = [
+        homeManagerModule
         {
-          useGlobalPkgs = false;
-          extraSpecialArgs = cfg.extraSpecialArgs;
+          home-manager =
+            {
+              useGlobalPkgs = false;
+              extraSpecialArgs = cfg.extraSpecialArgs;
+            }
+            // builtins.listToAttrs (
+              builtins.map (u: {
+                name = "users";
+                value = {
+                  ${u} = {
+                    home.stateVersion = "24.05";
+                    imports = cfg.modules;
+                  };
+                };
+              })
+              cfg.users
+            );
         }
-        // builtins.listToAttrs (
-          builtins.map (u: {
-            name = "users";
-            value = {
-              ${u} = {
-                home.stateVersion = "24.05";
-                imports = cfg.modules;
-              };
-            };
-          })
-          cfg.users
-        );
-    }
+      ];
+    })
   ];
-            };
+
 }
