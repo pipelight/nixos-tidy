@@ -32,7 +32,7 @@ in {
         '';
       };
       modules = mkOption {
-        type = with types; listOf raw;
+        type = with types; listOf anything;
         default = [];
         example = literalExpression "[ ./home.nix, otherModule ]";
         description = ''
