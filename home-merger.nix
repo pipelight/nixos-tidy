@@ -2,7 +2,7 @@
   config,
   lib,
   inputs,
-  # ...
+  ...
 }: let
   homeManagerModule = inputs.home-manager.nixosModules.home-manager;
   cfg = config.home-merger;
