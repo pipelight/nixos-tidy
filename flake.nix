@@ -15,8 +15,7 @@
     ...
   } @ inputs: {
     nixosModules = {
-      specialArgs = {inherit inputs;};
-      home-merger = ./home-merger.nix;
+      home-merger = ./home-merger.nix {inherit inputs;};
       allow-unfree = ./allow-unfree.nix;
     };
   };
