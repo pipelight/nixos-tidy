@@ -5,8 +5,7 @@
 }:
 with inputs;
 with lib; let
-  # Shorter name to access final settings
-  homeManagerModule = home-manager.nixosModules.home-manager;
+  homeManagerModule = inputs.home-manager.nixosModules.home-manager;
   cfg = config.home-merger;
 in {
   # Set the module options
