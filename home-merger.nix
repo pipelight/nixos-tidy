@@ -1,11 +1,12 @@
 {
   config,
   lib,
-  inputs,
+  home-manager,
   ...
 }:
 with lib; let
-  homeManagerModule = inputs.home-manager.nixosModules.home-manager;
+  homeManagerModule = home-manager.nixosModules.home-manager;
+  cfg = config.home-merger;
 in {
   # Set the module options
   options = {
@@ -41,9 +42,7 @@ in {
       };
     };
   };
-  imports = let
-    cfg = config.home-merger;
-  in [
+  imports = [
     homeManagerModule
     {
       home-manager =

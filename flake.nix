@@ -9,8 +9,8 @@
   outputs = {
     self,
     nixpkgs,
-    ...
-  } @ inputs: {
+    home-manager,
+  }: {
     nixosModules = {
       home-merger = ./home-merger.nix;
       allow-unfree = ./allow-unfree.nix;
