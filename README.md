@@ -149,37 +149,6 @@ home-merger = {
 }
 ```
 
-### Install
-
-Use flakes.
-
-```nix
-# flake.nix
-{
-  description = "My NixOS flake";
-  inputs = {
-    nixos-utils.url = "github:pipelight/nixos-tidy";
-  };
-  outputs = {
-    nixpkgs,
-    nixos-utils,
-    ...
-  } @ inputs: let
-    homeMergerModule = nixos-utils.nixosModules.home-merger;
-  in {
-      nixosConfiguration = {
-      default = pkgs.lib.nixosSystem {
-        inherit system;
-        modules = [
-            ./default
-            homeMergerModule
-        ];
-      };
-    }
-  };
-}
-```
-
 ## Allow-unfree (with regex)
 
 Cherry pick the unfree software you want to allow (can and should use regex!!)
@@ -192,23 +161,24 @@ allow-unfree = [
 ];
 ```
 
-### Install
+## Install
 
-Use flakes.
+As a flake.
 
 ```nix
 # flake.nix
 {
   description = "My NixOS flake";
   inputs = {
-    nixos-utils.url = "github:pipelight/nixos-tidy";
+    nixos-tidy.url = "github:pipelight/nixos-tidy";
   };
   outputs = {
     nixpkgs,
-    nixos-utils,
+    nixos-tidy,
     ...
   } @ inputs: let
-    allowUnfreeModule = nixos-utils.nixosModules.allow-unfree;
+    homeMergerModule = nixos-tidy.nixosModules.home-merger;
+    allowUnfreeModule = nixos-tidy.nixosModules.allow-unfree;
   in {
       nixosConfiguration = {
       default = pkgs.lib.nixosSystem {
@@ -216,6 +186,7 @@ Use flakes.
         modules = [
             ./default
             allowUnfreeModule
+            homeMergerModule
         ];
       };
     }
