@@ -1,4 +1,8 @@
-# Nixos utils for sharable configurations.
+# Nixos-tidy
+
+A set of Nix functions/modules
+to ease the creation of
+**sharable, flexible and standardized Nixos configurations**.
 
 ## Home-merger (better separation of concerns)
 
@@ -154,7 +158,7 @@ Use flakes.
 {
   description = "My NixOS flake";
   inputs = {
-    nixos-utils.url = "github:pipelight/nixos-utils";
+    nixos-utils.url = "github:pipelight/nixos-tidy";
   };
   outputs = {
     nixpkgs,
@@ -176,13 +180,9 @@ Use flakes.
 }
 ```
 
-# Extra utils
+## Allow-unfree (with regex)
 
-Some other small utilities that may happened to be useful.
-
-## Allow-unfree
-
-Cherry pick the unfree software you want to allow (can use regex!!)
+Cherry pick the unfree software you want to allow (can and should use regex!!)
 
 ```nix
 #default.nix
@@ -201,7 +201,7 @@ Use flakes.
 {
   description = "My NixOS flake";
   inputs = {
-    nixos-utils.url = "github:pipelight/nixos-utils";
+    nixos-utils.url = "github:pipelight/nixos-tidy";
   };
   outputs = {
     nixpkgs,
@@ -211,7 +211,7 @@ Use flakes.
     allowUnfreeModule = nixos-utils.nixosModules.allow-unfree;
   in {
       nixosConfiguration = {
-      crocuda = pkgs.lib.nixosSystem {
+      default = pkgs.lib.nixosSystem {
         inherit system;
         modules = [
             ./default
