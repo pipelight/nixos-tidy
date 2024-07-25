@@ -116,7 +116,7 @@ home-merger = {
 }
 ```
 
-## How it works
+### How it works
 
 Calling home-manager directly would raise an error
 because you can only declare the home-manager module once.
@@ -126,7 +126,7 @@ to declare them at once.
 
 _It is just a 60 lines function but oh boy does it do good!_
 
-## Usage in your configuration files
+### Usage in your configuration files
 
 Time to glow by your nix aptitudes.
 
@@ -169,7 +169,7 @@ home-merger = {
 You may find a complete working example in the
 [crocuda.nixos](https://github.com/pipelight/crocuda.nixos) configuration repository.
 
-## Allow-unfree (with regex)
+## Allow unfree software (with regex)
 
 Cherry pick the unfree software you want to allow with regexes.
 
