@@ -16,45 +16,45 @@ substential rewritting efforts because:
 
 - You can get away with **hardcoded user names** (and some other variables).
 
-```nix
-users.users.<username> = {
-    some_stuffs = {};
-}
-```
+  ```nix
+  users.users.<username> = {
+      some_stuffs = {};
+  }
+  ```
 
 - You have to export standard modules and home-manager modules separately,
   resulting in **awkward file tree and dependency management**,
   and **unwelcoming top-level module declaration**.
 
-```sh
-.
-├── nixos
-│   ├── gnome.nix
-│   └── hyprland.nix
-└── home-manager
-    ├── gnome.nix # should be grouped with its homologous
-    └── hyprland.nix
-```
+  ```sh
+  .
+  ├── nixos
+  │   ├── gnome.nix
+  │   └── hyprland.nix
+  └── home-manager
+      ├── gnome.nix # should be grouped with its homologous
+      └── hyprland.nix
+  ```
 
-```nix
-# flake.nix
-nixosConfiguration = {
-    default = pkgs.lib.nixosSystem {
-        inherit system;
-        modules = [
-            ./nixos/gnome.nix
-            home-manager.nixosModules.home-manager {
-                home-manager.users.<username> = {pkgs,...}: {
-                   imports = [
-                      ./home-manager/gnome.nix
-                   ];
-                };
-            };
-        ];
-    };
-};
-
-```
+  ```nix
+  # flake.nix
+  nixosConfiguration = {
+      default = pkgs.lib.nixosSystem {
+          inherit system;
+          modules = [
+              ./nixos/gnome.nix
+              home-manager.nixosModules.home-manager {
+                  home-manager.users.<username> = {pkgs,...}: {
+                     imports = [
+                        ./home-manager/gnome.nix
+                     ];
+                  };
+              };
+          ];
+      };
+  };
+  
+  ```
 
 ### Solution
 
