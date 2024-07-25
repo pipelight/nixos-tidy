@@ -97,7 +97,7 @@ or simply use the home-merger module.
   };
   ```
 
-The magic happens in the standard module file (here default.nix).
+The magic happens in the standard module file (here `default.nix`).
 You can import a home-manager modules through home-merger.
 
 ```nix
