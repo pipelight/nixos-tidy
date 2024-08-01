@@ -1,10 +1,6 @@
-## Your custom configuration file
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}: {
+## This is a random system configuration.
+## You should use your custom configuration file instead.
+{pkgs, ...}: {
   # Use the systemd-boot EFI boot loader.
   # boot.kernelPackages = pkgs.linuxPackages;
   boot = {
