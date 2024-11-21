@@ -49,17 +49,14 @@
         ]
       },
       "locked": {
-        "lastModified": 1721909638,
-        "narHash": "sha256-tyDk693/ERJWHxLvHq41IYJvuL7lAJSqLvRJ3rqqhrU=",
-        "owner": "pipelight",
-        "repo": "nixos-tidy",
-        "rev": "ae27ae80824ed7b33e017fdbf3f609bf10c40a73",
-        "type": "github"
+        "lastModified": 1732220099,
+        "narHash": "sha256-IXcPrlqhgWZDvEjar4Tt/0rbgb9jGAkoIELNAqQAa7c=",
+        "path": "/home/anon/Fast/nixos-tidy",
+        "type": "path"
       },
       "original": {
-        "owner": "pipelight",
-        "repo": "nixos-tidy",
-        "type": "github"
+        "path": "/home/anon/Fast/nixos-tidy",
+        "type": "path"
       }
     },
     "nixpkgs": {

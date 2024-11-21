@@ -38,10 +38,10 @@ with lib; {
       lib,
       utils,
       ...
-    }: {
+    }: let
       # Define your users to apply home-manager config.
       my_config.users = ["alice" "bob"];
-
+    in {
       # Create users
       users.users.alice.isNormalUser = true;
       users.users.bob.isNormalUser = true;

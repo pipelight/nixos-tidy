@@ -8,7 +8,8 @@
     ###################################
     ## NixOs-tidy and dependencies
     nixos-tidy = {
-      url = "github:pipelight/nixos-tidy";
+      url = "path:/home/anon/Fast/nixos-tidy";
+      # url = "github:pipelight/nixos-tidy";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
@@ -31,15 +32,21 @@
     self,
     nixpkgs,
     ...
-  } @ inputs: {
+  } @ inputs: let
+    system = "x86_64-linux";
+    pkgs = nixpkgs;
+  in rec {
     nixosConfigurations = {
       # Default module
-      default = nixpkgs.lib.nixosSystem {
+      default = pkgs.lib.nixosSystem {
         specialArgs = {inherit inputs;};
         modules = [
           ./default.nix
         ];
       };
+    };
+    packages."${system}" = {
+      default = nixosConfigurations.default.config.system.build.toplevel;
     };
   };
 }
