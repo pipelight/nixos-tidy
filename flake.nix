@@ -13,10 +13,12 @@
     self,
     nixpkgs,
     ...
-  } @ inputs: {
+  } @ inputs: rec {
     nixosModules = {
       home-merger = ./lib/home-merger.nix;
       allow-unfree = ./lib/allow-unfree.nix;
     };
+    umport = (import ./lib/umport.nix {inherit (nixpkgs) lib nixosModules;}).umport;
+    umport-home = (import ./lib/umport.nix {inherit (nixpkgs) lib nixosModules;}).umport-home;
   };
 }

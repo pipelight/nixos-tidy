@@ -49,8 +49,8 @@
         ]
       },
       "locked": {
-        "lastModified": 1732202838,
-        "narHash": "sha256-eEmjqSldOFUBjEtEYxdRTz5h8id33p0dlz1HDBlhz74=",
+        "lastModified": 1732208510,
+        "narHash": "sha256-KUonArPF18WQbVnouyoLflYaXeHvG4sRYbLarrrCdeI=",
         "path": "/home/anon/Fast/nixos-tidy",
         "type": "path"
       },

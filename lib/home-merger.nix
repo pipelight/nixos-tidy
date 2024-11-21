@@ -55,6 +55,7 @@ in {
             value = {
               ${u} = {
                 home.stateVersion = "24.05";
+                # home.stateVersion = config.system.stateVersion;
                 imports = cfg.modules;
               };
             };

@@ -12,6 +12,8 @@
   ];
 
   home.file = {
-    # ".config/keepassxc/keepassxc.ini".source = dotfiles/keepassxc/keepassxc.ini;
+    "test/umport".text = ''
+      This is a random test file to check if umport-home module works.
+    '';
   };
 }
