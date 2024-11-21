@@ -8,7 +8,8 @@
     ###################################
     ## NixOs-tidy and dependencies
     nixos-tidy = {
-      url = "github:pipelight/nixos-tidy";
+      url = "path:/home/anon/Fast/nixos-tidy";
+      # url = "github:pipelight/nixos-tidy";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {

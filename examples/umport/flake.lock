@@ -2,7 +2,9 @@
   "nodes": {
     "home-manager": {
       "inputs": {
-        "nixpkgs": ["nixpkgs"]
+        "nixpkgs": [
+          "nixpkgs"
+        ]
       },
       "locked": {
         "lastModified": 1732025103,
@@ -20,7 +22,10 @@
     },
     "home-manager_2": {
       "inputs": {
-        "nixpkgs": ["nixos-tidy", "nixpkgs"]
+        "nixpkgs": [
+          "nixos-tidy",
+          "nixpkgs"
+        ]
       },
       "locked": {
         "lastModified": 1710532761,
@@ -39,20 +44,19 @@
     "nixos-tidy": {
       "inputs": {
         "home-manager": "home-manager_2",
-        "nixpkgs": ["nixpkgs"]
+        "nixpkgs": [
+          "nixpkgs"
+        ]
       },
       "locked": {
-        "lastModified": 1721909638,
-        "narHash": "sha256-tyDk693/ERJWHxLvHq41IYJvuL7lAJSqLvRJ3rqqhrU=",
-        "owner": "pipelight",
-        "repo": "nixos-tidy",
-        "rev": "ae27ae80824ed7b33e017fdbf3f609bf10c40a73",
-        "type": "github"
+        "lastModified": 1732202838,
+        "narHash": "sha256-eEmjqSldOFUBjEtEYxdRTz5h8id33p0dlz1HDBlhz74=",
+        "path": "/home/anon/Fast/nixos-tidy",
+        "type": "path"
       },
       "original": {
-        "owner": "pipelight",
-        "repo": "nixos-tidy",
-        "type": "github"
+        "path": "/home/anon/Fast/nixos-tidy",
+        "type": "path"
       }
     },
     "nixpkgs": {
