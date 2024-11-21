@@ -1,5 +1,5 @@
 {
-  description = "A tidy flake template";
+  description = "A flake that uses home-merger";
   inputs = {
     # NixOs pkgs
     # nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";

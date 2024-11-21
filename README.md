@@ -166,8 +166,11 @@ home-merger = {
 }
 ```
 
-You may find a complete working example in the
-[crocuda.nixos](https://github.com/pipelight/crocuda.nixos) configuration repository.
+Head to the template directory for a boilerplate
+-> [template](https://github.com/pipelight/nixos-tidy/template).
+
+You may find a complete working example in the crocuda module repository
+-> [crocuda.nixos](https://github.com/pipelight/crocuda.nixos).
 
 ## Allow unfree software (with regex)
 
@@ -206,7 +209,7 @@ allow-unfree = [
 
 ## Install
 
-As a flake.
+Add the flake to your existing configuration.
 
 ```nix
 # flake.nix
@@ -216,20 +219,17 @@ As a flake.
     nixos-tidy.url = "github:pipelight/nixos-tidy";
   };
   outputs = {
+    self,
     nixpkgs,
-    nixos-tidy,
     ...
-  } @ inputs: let
-    homeMergerModule = nixos-tidy.nixosModules.home-merger;
-    allowUnfreeModule = nixos-tidy.nixosModules.allow-unfree;
-  in {
+  } @ inputs: {
       nixosConfiguration = {
       default = pkgs.lib.nixosSystem {
-        inherit system;
+        specialArgs = {inherit inputs;};
         modules = [
-            ./default
-            allowUnfreeModule
-            homeMergerModule
+            inputs.nixos-tidy.nixosModules.home-merger;
+            inputs.nixos-tidy.nixosModules.allow-unfree;
+            ./default.nix
         ];
       };
     }

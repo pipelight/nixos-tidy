@@ -48,6 +48,6 @@ with lib; {
     })
 
     # An example module
-    ./a_module/default.nix
+    ./my_module/default.nix
   ];
 }

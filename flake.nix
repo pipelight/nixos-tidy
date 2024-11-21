@@ -15,8 +15,8 @@
     ...
   } @ inputs: {
     nixosModules = {
-      home-merger = ./home-merger.nix;
-      allow-unfree = ./allow-unfree.nix;
+      home-merger = ./lib/home-merger.nix;
+      allow-unfree = ./lib/allow-unfree.nix;
     };
   };
 }

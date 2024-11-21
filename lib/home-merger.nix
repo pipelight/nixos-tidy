@@ -41,26 +41,26 @@ in {
     };
   };
 
-    imports = [
-      homeManagerModule
-      {
-        home-manager =
-          {
-            useGlobalPkgs = false;
-            extraSpecialArgs = cfg.extraSpecialArgs;
-          }
-          // builtins.listToAttrs (
-            builtins.map (u: {
-              name = "users";
-              value = {
-                ${u} = {
-                  home.stateVersion = "24.05";
-                  imports = cfg.modules;
-                };
+  imports = [
+    homeManagerModule
+    {
+      home-manager =
+        {
+          useGlobalPkgs = false;
+          extraSpecialArgs = cfg.extraSpecialArgs;
+        }
+        // builtins.listToAttrs (
+          builtins.map (u: {
+            name = "users";
+            value = {
+              ${u} = {
+                home.stateVersion = "24.05";
+                imports = cfg.modules;
               };
-            })
-            cfg.users
-          );
-      }
-    ];
+            };
+          })
+          cfg.users
+        );
+    }
+  ];
 }
