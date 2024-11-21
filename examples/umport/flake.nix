@@ -41,12 +41,11 @@
         specialArgs = {inherit inputs;};
         modules = [
           ./default.nix
-          ./configuration.nix
         ];
       };
     };
     packages."${system}" = {
-      default = nixosConfigurations.default.config.system.build.isoImage;
+      default = nixosConfigurations.default.config.system.build.toplevel;
     };
   };
 }

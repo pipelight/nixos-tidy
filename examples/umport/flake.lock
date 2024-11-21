@@ -2,9 +2,7 @@
   "nodes": {
     "home-manager": {
       "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
+        "nixpkgs": ["nixpkgs"]
       },
       "locked": {
         "lastModified": 1732025103,
@@ -22,10 +20,7 @@
     },
     "home-manager_2": {
       "inputs": {
-        "nixpkgs": [
-          "nixos-tidy",
-          "nixpkgs"
-        ]
+        "nixpkgs": ["nixos-tidy", "nixpkgs"]
       },
       "locked": {
         "lastModified": 1710532761,
@@ -44,9 +39,7 @@
     "nixos-tidy": {
       "inputs": {
         "home-manager": "home-manager_2",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
+        "nixpkgs": ["nixpkgs"]
       },
       "locked": {
         "lastModified": 1721909638,

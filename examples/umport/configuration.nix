@@ -1,6 +1,10 @@
 ## This is a random system configuration.
 ## You should use your custom configuration file instead.
-{pkgs, ...}: {
+{
+  pkgs,
+  lib,
+  ...
+}: {
   # Use the systemd-boot EFI boot loader.
   # boot.kernelPackages = pkgs.linuxPackages;
   boot = {
@@ -26,4 +30,7 @@
   # Channel
   # system.autoUpgrade.channel = "https://nixos.org/channels/nixos-unstable/";
   system.autoUpgrade.channel = "https://nixos.org/channels/nixos-24.05/";
+
+  # Hardware
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 }
