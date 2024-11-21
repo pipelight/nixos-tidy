@@ -3,11 +3,7 @@
 #
 # This fork integrates home_merger to load default.nix and home.nix files.
 #
-{
-  lib,
-  nixosModules,
-  ...
-}: let
+{lib, ...}: let
   ## The umport function
   ## Returns an list/array of uniq filepaths to import.
   umport-home = inputs @ {
@@ -32,7 +28,7 @@
           (file:
             pathIsRegularFile file
             && hasSuffix ".nix" (builtins.toString file)
-            && hasInfix "home" (builtins.toString file)
+            && hasInfix "home." (builtins.toString file)
             && !isExcluded file)
           (concatMap (
               _path:
@@ -84,7 +80,7 @@
           (file:
             pathIsRegularFile file
             && hasSuffix ".nix" (builtins.toString file)
-            && !hasInfix "home" (builtins.toString file)
+            && !hasInfix "home." (builtins.toString file)
             && !isExcluded file)
           (concatMap (
               _path:

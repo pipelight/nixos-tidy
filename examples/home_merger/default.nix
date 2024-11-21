@@ -45,9 +45,17 @@ with lib; {
       # Create users
       users.users.alice.isNormalUser = true;
       users.users.bob.isNormalUser = true;
+
+      home-merger = {
+        enable = true;
+        users = my_config.users;
+        modules = [
+          ./my_module/home.nix
+        ];
+      };
     })
 
     # An example module
-    ./a_module/default.nix
+    ./my_module/default.nix
   ];
 }

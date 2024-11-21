@@ -48,7 +48,6 @@ with lib; {
       imports = inputs.nixos-tidy.umport {
         # User specific
         paths = [./my_module];
-        recursive = true;
       };
       home-merger = {
         enable = true;
@@ -59,7 +58,4 @@ with lib; {
       };
     })
   ];
-  # ++ fn_test {
-  #   paths = [./my_module];
-  # };
 }
