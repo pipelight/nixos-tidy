@@ -46,7 +46,7 @@ in {
     {
       home-manager =
         {
-          useGlobalPkgs = false;
+          useGlobalPkgs = true;
           extraSpecialArgs = cfg.extraSpecialArgs;
         }
         // builtins.listToAttrs (
