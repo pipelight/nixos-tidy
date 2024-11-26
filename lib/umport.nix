@@ -29,8 +29,6 @@
             pathIsRegularFile file
             && hasSuffix ".nix" (builtins.toString file)
             && hasInfix "home." (builtins.toString file)
-            # Exclud .git repo
-            && !hasInfix ".git" (builtins.toString file)
             && !isExcluded file)
           (concatMap (
               _path:
@@ -83,8 +81,6 @@
             pathIsRegularFile file
             && hasSuffix ".nix" (builtins.toString file)
             && !hasInfix "home." (builtins.toString file)
-            # Exclud .git repo
-            && !hasInfix ".git" (builtins.toString file)
             && !isExcluded file)
           (concatMap (
               _path:

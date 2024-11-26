@@ -4,6 +4,10 @@ A set of Nix functions/modules
 to ease the creation of
 **sharable, flexible and standardized Nixos configurations**.
 
+You may find a complete working example in the crocuda module repository.
+Where all the magic happens in `default.nix`.
+-> [crocuda.nixos](https://github.com/pipelight/crocuda.nixos).
+
 ## Home-merger (better separation of concerns)
 
 Merge a nixOs module and its home-manager equivalent module in a single module.
@@ -105,10 +109,8 @@ You can import a home-manager modules through home-merger.
 home-merger = {
     # A list of users username for which to apply the modules.
     users = ["alice", "bob"];
-
     # Arguments to pass to the module
     extraSpecialArgs = { inherit inputs cfg; };
-
     # A list of modules to be applied to the users
     modules = [
         ./home.nix
@@ -167,10 +169,41 @@ home-merger = {
 ```
 
 Head to the template directory for a boilerplate
--> [template](https://github.com/pipelight/nixos-tidy/template).
+-> [example](https://github.com/pipelight/nixos-tidy/example).
 
-You may find a complete working example in the crocuda module repository
--> [crocuda.nixos](https://github.com/pipelight/crocuda.nixos).
+## Yunfachi's Umport
+
+Now a way to get rid of all this boilerplate of **import** statements,
+is to use a top-level **umport**.
+
+```nix
+imports = inputs.nixos-tidy.umport {
+    # User specific
+    paths = [./my_module];
+};
+home-merger = {
+    enable = true;
+    users = my_config.users;
+    modules = inputs.nixos-tidy.umport-home {
+        paths = [./my_module];
+    };
+};
+```
+
+Every files of this-file tree will be recursively imported
+without the need of import statements.
+
+```sh
+
+.
+├── gnome
+│   ├── default.nix
+│   └── home.nix
+├── hyprland
+│  ├── default.nix
+│  └── home.nix
+└── default.nix #put boilerplate code at the top-level.
+```
 
 ## Allow unfree software (with regex)
 

@@ -47,7 +47,6 @@ with lib; {
       users.users.bob.isNormalUser = true;
 
       home-merger = {
-        enable = true;
         users = my_config.users;
         modules = [
           ./my_module/home.nix

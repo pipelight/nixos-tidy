@@ -10,9 +10,6 @@ in {
   # Set the module options
   options = with lib; {
     home-merger = {
-      enable = mkEnableOption ''
-        Wether to enable thos modules for the specified users'.
-      '';
       users = mkOption {
         type = with types; listOf str;
         default = [];
