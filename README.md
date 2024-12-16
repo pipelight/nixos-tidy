@@ -182,7 +182,6 @@ imports = inputs.nixos-tidy.umport {
     paths = [./my_module];
 };
 home-merger = {
-    enable = true;
     users = my_config.users;
     modules = inputs.nixos-tidy.umport-home {
         paths = [./my_module];
