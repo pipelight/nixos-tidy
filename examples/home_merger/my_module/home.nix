@@ -5,10 +5,6 @@
   ...
 }: {
   home.packages = with pkgs; [
-    ## Password managers
-    keepassxc
-    gnupg
-    cryptsetup
   ];
 
   home.file = {

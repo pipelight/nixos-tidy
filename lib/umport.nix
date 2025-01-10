@@ -7,7 +7,6 @@
   ## The umport function
   ## Returns an list/array of uniq filepaths to import.
   umport-home = inputs @ {
-    path ? null,
     paths ? [],
     include ? [],
     exclude ? [],
@@ -59,7 +58,6 @@
         )
       );
   umport = inputs @ {
-    path ? null,
     paths ? [],
     include ? [],
     exclude ? [],
@@ -110,6 +108,7 @@
           else unique include
         )
       );
+
   test = {
     path ? null,
     paths ? [],

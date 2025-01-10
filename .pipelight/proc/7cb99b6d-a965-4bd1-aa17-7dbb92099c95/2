@@ -1,0 +1,16 @@
+warning: unknown setting 'allowed-users'
+warning: unknown setting 'trusted-users'
+warning: `--gc-roots-dir' not specified
+fetching git input 'git+file:///home/anon/Fast/nixos-tidy'
+warning: Git tree '/home/anon/Fast/nixos-tidy' is dirty
+error:
+       … while calling the 'import' builtin
+         at /nix/store/4bzfw30jj3la4wh06vri1gclxn5fdwz2-source/flake.nix:31:16:
+           30|
+           31|     libTests = import ./test.nix;
+             |                ^
+           32|   };
+
+       … while realising the context of path '/nix/store/4bzfw30jj3la4wh06vri1gclxn5fdwz2-source/test.nix'
+
+       error: getting status of '/nix/store/4bzfw30jj3la4wh06vri1gclxn5fdwz2-source/test.nix': No such file or directory
