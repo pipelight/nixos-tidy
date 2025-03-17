@@ -1,7 +1,11 @@
 {
+  lib,
+  slib,
+  ...
+}: {
   testPass = {
-    expr = 1;
-    expected = 1;
+    expr = slib.umport {paths = [./templates];};
+    expected = ["./templates/default.nix"];
   };
 
   testFail = {
