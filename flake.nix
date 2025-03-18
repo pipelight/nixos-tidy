@@ -37,7 +37,7 @@
           })
           .umport-home;
       };
-      tests = import ./lib/lib.test.nix {
+      tests = import ./lib/test.utils.nix {
         inherit slib;
         inherit (nixpkgs) lib nixosModules;
       };

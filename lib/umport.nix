@@ -7,6 +7,7 @@
   ## The umport function
   ## Returns an list/array of uniq filepaths to import.
   umport-home = inputs @ {
+    path ? null,
     paths ? [],
     include ? [],
     exclude ? [],
@@ -29,10 +30,11 @@
             && hasSuffix ".nix" (builtins.toString file)
             && hasInfix "home." (builtins.toString file)
             && !isExcluded file)
-          (concatMap (
+          (
+            concatMap (
               _path:
                 if recursive
-                then toList _path
+                then toList (maybeMissing _path)
                 else
                   mapAttrsToList (
                     name: type:
@@ -45,11 +47,7 @@
                   )
                   (builtins.readDir _path)
             )
-            (unique (
-              if path == null
-              then paths
-              else [path] ++ paths
-            )))
+          )
         )
         ++ (
           if recursive
@@ -58,6 +56,7 @@
         )
       );
   umport = inputs @ {
+    path ? null,
     paths ? [],
     include ? [],
     exclude ? [],
@@ -72,15 +71,18 @@
         then true
         else (filter (excludedDir: lib.path.hasPrefix excludedDir path) excludedDirs) != [];
     in
+      # Remove duplicates
       unique (
         (
+          # Filters
           filter
           (file:
             pathIsRegularFile file
             && hasSuffix ".nix" (builtins.toString file)
             && !hasInfix "home." (builtins.toString file)
             && !isExcluded file)
-          (concatMap (
+          (
+            concatMap (
               _path:
                 if recursive
                 then toList _path
@@ -96,11 +98,7 @@
                   )
                   (builtins.readDir _path)
             )
-            (unique (
-              if path == null
-              then paths
-              else [path] ++ paths
-            )))
+          )
         )
         ++ (
           if recursive
@@ -108,7 +106,6 @@
           else unique include
         )
       );
-
   test = {
     path ? null,
     paths ? [],
