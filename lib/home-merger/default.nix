@@ -35,7 +35,7 @@ with slib; let
         );
     };
 
-  mkHydratedHomeModuleWrapper = {
+  _mkHydratedHomeModuleWrapper = {
     users ? ["anon"],
     stateVersion ? "25.05",
     useGlobalPkgs ? true,
@@ -45,12 +45,16 @@ with slib; let
     paths ? [],
     exclude ? [],
   } @ umportArgs:
-    _mkHomeModuleWrapper
-    (homeArgs
-      // {
-        imports = imports ++ umportHomeModules umportArgs;
-      });
+    with lib;
+      _mkHomeModuleWrapper
+      {
+        inherit users stateVersion useGlobalPkgs extraSpecialArgs;
+        imports =
+          []
+          ++ imports
+          ++ umportHomeModules umportArgs;
+      };
 in {
-  inherit mkHydratedHomeModuleWrapper;
+  inherit _mkHydratedHomeModuleWrapper;
   inherit _mkHomeModuleWrapper;
 }

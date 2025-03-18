@@ -173,8 +173,9 @@ with slib; let
     homeManagerModule = inputs.home-manager.nixosModules.home-manager;
   in
     []
+    ++ imports
     ++ umportNixModules umportArgs
-    ++ [homeManagerModule (mkHydratedHomeModuleWrapper homeArgs umportArgs)];
+    ++ [homeManagerModule (_mkHydratedHomeModuleWrapper homeArgs umportArgs)];
 in {
   inherit isExcluded;
   inherit umportNixModules;
