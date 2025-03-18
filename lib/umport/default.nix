@@ -168,7 +168,6 @@ with slib; let
     stateVersion ? "25.05",
     useGlobalPkgs ? true,
     extraSpecialArgs ? {},
-    modules ? [],
     imports ? [],
   } @ homeArgs: let
     homeManagerModule = inputs.home-manager.nixosModules.home-manager;

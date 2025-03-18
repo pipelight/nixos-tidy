@@ -14,13 +14,12 @@ with slib; let
     stateVersion ? "25.05",
     useGlobalPkgs ? true,
     extraSpecialArgs ? {},
-    modules ? [],
     imports ? [],
   } @ homeArgs:
     with lib; {
       home-manager =
         {
-          inherit useGlobalPkgs extraSpecialArgs modules;
+          inherit useGlobalPkgs extraSpecialArgs;
         }
         // builtins.listToAttrs (
           builtins.map (u: {
@@ -41,7 +40,6 @@ with slib; let
     stateVersion ? "25.05",
     useGlobalPkgs ? true,
     extraSpecialArgs ? {},
-    modules ? [],
     imports ? [],
   } @ homeArgs: {
     paths ? [],
