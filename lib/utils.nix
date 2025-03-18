@@ -15,7 +15,7 @@ Features:
    - follow this globbing pattern *.nix
    - rejects home modules *.home.*.nix
   */
-  filter_nixModules = {exclude ? []} @ args: path:
+  filterNixModules = {exclude ? []} @ args: path:
     with lib;
     with fileset;
       pathIsRegularFile path
@@ -30,7 +30,7 @@ Features:
   A filter for home modules files only
   - follows this globbing pattern *.home.*.nix
   */
-  filter_homeModules = {exclude ? []} @ args: path:
+  filterHomeModules = {exclude ? []} @ args: path:
     with lib;
     with fileset;
       pathIsRegularFile path
@@ -61,19 +61,18 @@ Features:
 
   /*
   Import recursively every files from paths.
+  (and ignore current file to avoid infinite recursion)
 
   Usually you want top level import with.
 
   - import every path from calling site
     `paths = [./.]`
-  - ignore calling site to avoid infinite recursion
-    `exclude = [./default.nix]`
 
   ```nix
-  import = umport { paths = [./.] exclude = [./default.nix]}
+  import = umportNixModules { paths = [./.] exclude = [./default.nix]}
   ````
   */
-  umport = {
+  umportNixModules = {
     paths ? [],
     exclude ? [],
   } @ args:
@@ -81,12 +80,42 @@ Features:
     with fileset;
       unique (
         filter
-        (filter_nixModules {
+        (filterNixModules {
           inherit exclude;
         })
         (concatMap (path: toList path) paths)
       );
+
+  /*
+  Import recursively every files from paths.
+  (and ignore current file to avoid infinite recursion)
+
+  ```nix
+  import = umportHomeModules { paths = [./.]}
+  ````
+  */
+  umportHomeModules = {
+    paths ? [],
+    exclude ? [],
+  } @ args: users:
+    with lib;
+    with fileset; {
+      home-merger = {
+        extraSpecialArgs = {
+          inherit inputs cfg pkgs-stable pkgs-unstable pkgs-deprecated;
+        };
+        users = cfg.users;
+        modules = unique (
+          filter
+          (filterNixModules {
+            inherit exclude;
+          })
+          (concatMap (path: toList path) paths)
+        );
+      };
+    };
 in {
   inherit isExcluded;
-  inherit umport;
+  inherit umportNixModules;
+  inherit umportHomeModules;
 }
