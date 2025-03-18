@@ -14,7 +14,7 @@ with slib; let
     stateVersion ? "25.05",
     useGlobalPkgs ? true,
     extraSpecialArgs ? {},
-    ...
+    imports ? [],
   } @ homeArgs:
     with lib; {
       home-manager =
