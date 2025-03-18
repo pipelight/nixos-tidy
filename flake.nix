@@ -21,13 +21,15 @@
     ...
   } @ inputs:
     rec {
+      # templates = {
+      #   default = ./templates/default.nix;
+      # };
       nixosModules = {
         home-merger = ./modules/home-merger.nix;
         allow-unfree = ./lib/allow-unfree.nix;
       };
-      # templates = {
-      #   default = ./templates/default.nix;
-      # };
+
+      lib = slib;
       slib =
         {}
         // (import ./lib/home-merger {
@@ -71,10 +73,8 @@
           }
           ''
             export HOME="$(realpath .)"
-
             # The nix derivation must be able to find all used inputs
             # in the nix-store because it cannot download it during buildTime.
-
             nix-unit --eval-store "$HOME" \
               --extra-experimental-features flakes \
               --override-input nixpkgs ${nixpkgs} \
