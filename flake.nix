@@ -22,7 +22,7 @@
   } @ inputs:
     rec {
       nixosModules = {
-        home-merger = ./lib/home-merger.nix;
+        home-merger = ./modules/home-merger.nix;
         allow-unfree = ./lib/allow-unfree.nix;
       };
       # templates = {
@@ -30,7 +30,8 @@
       # };
       slib =
         {}
-        // (import ./lib/umport/utils.nix {inherit (nixpkgs) lib;});
+        // (import ./lib/umport {inherit (nixpkgs) lib;})
+        // (import ./lib/home-merger {inherit (nixpkgs) lib;});
 
       tests =
         {}

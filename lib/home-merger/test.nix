@@ -6,8 +6,8 @@
   /*
   Test umport with a top directory.
   */
-  testHomeMerge = {
-    expr = slib.mkHome {paths = [../templates];};
+  testMkModuleWrapper = {
+    expr = slib.mkModuleWrapper {paths = [../templates];};
     expected = [
       ../templates/default.nix
       ../templates/module1/default.nix

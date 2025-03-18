@@ -1,64 +1,37 @@
-{
-  config,
-  lib,
-  inputs,
-  ...
-}: let
-  homeManagerModule = inputs.home-manager.nixosModules.home-manager;
-  cfg = config.home-merger;
-in {
-  # Set the module options
-  options = with lib; {
-    home-merger = {
-      users = mkOption {
-        type = with types; listOf str;
-        default = [];
-        example = literalExpression "[\"alice\",\"bob\"]";
-        description = ''
-          The name of users for whome to add this module.
-        '';
-      };
-      extraSpecialArgs = mkOption {
-        type = with types; attrs;
-        default = {};
-        example = literalExpression "{ inherit inputs; }";
-        description = ''
-          Extra `specialArgs` passed to Home Manager. This
-          option can be used to pass additional arguments to all modules.
-        '';
-      };
-      modules = mkOption {
-        type = with types; listOf raw;
-        default = [];
-        example = literalExpression "[ ./home.nix, otherModule ]";
-        description = ''
-          Modules to add to the user configuration.
-        '';
-      };
-    };
-  };
-
-  imports = [
-    homeManagerModule
-    {
+{lib, ...}: let
+  /*
+  Make a top level module to:
+    - import every home-manager modules files.
+    - apply modules to user list.
+  */
+  mkHomeModuleWrapper = {
+    users ? ["anon"],
+    stateVersion ? "25.05",
+    useGlobalPkgs ? true,
+    extraSpecialArgs ? {},
+  } @ args:
+    with lib; {
       home-manager =
         {
-          useGlobalPkgs = true;
-          extraSpecialArgs = cfg.extraSpecialArgs;
+          useGlobalPkgs = useGlobalPkgs;
+          extraSpecialArgs = extraSpecialArgs;
         }
         // builtins.listToAttrs (
           builtins.map (u: {
             name = "users";
             value = {
               ${u} = {
-                home.stateVersion = "24.05";
+                # In general you want:
                 # home.stateVersion = config.system.stateVersion;
+                home.stateVersion = stateVersion;
                 imports = cfg.modules;
               };
             };
           })
-          cfg.users
+          # cfg.users
+          users
         );
-    }
-  ];
+    };
+in {
+  inherit mkHomeModuleWrapper;
 }
