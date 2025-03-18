@@ -48,7 +48,7 @@ with slib; let
     _mkHomeModuleWrapper
     (homeArgs
       // {
-        imports = umportHomeModules umportArgs;
+        imports = imports ++ umportHomeModules umportArgs;
       });
 in {
   inherit mkHydratedHomeModuleWrapper;
