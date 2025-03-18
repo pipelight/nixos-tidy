@@ -165,6 +165,7 @@ with slib; let
     exclude ? [],
   } @ umportArgs: {
     users ? ["anon"],
+    modules ? [],
     stateVersion ? "25.05",
     useGlobalPkgs ? true,
     extraSpecialArgs ? {},
