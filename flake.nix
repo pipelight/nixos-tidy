@@ -29,7 +29,7 @@
       #   default = ./templates/default.nix;
       # };
       slib = {
-        umport = (import ./lib/umport.nix {inherit (nixpkgs) lib nixosModules;}).umport;
+        umport = (import ./lib/utils.nix {inherit (nixpkgs) lib nixosModules;}).umport;
         umport-home =
           (import ./lib/umport.nix {
             inherit slib;
