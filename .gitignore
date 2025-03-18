@@ -1,3 +1,7 @@
 # nixos artifacts
 .direnv
-result
+.envrc
+/result
+
+# cicd
+.pipelight

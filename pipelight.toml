@@ -4,5 +4,5 @@ name = "test"
 [[pipelines.steps]]
 name = "run lix-unit tests"
 commands = ["""
-  nix-unit --flake '.#libTests'
+  nix-unit --flake '.#tests'
 """]
