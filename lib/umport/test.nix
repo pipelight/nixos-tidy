@@ -25,13 +25,18 @@
     expected = [../templates/default.nix];
   };
   /*
-  Test umport with a top directory and exclude list.
+  Test umport home with a top directory.
   */
-  testUmportIgnoreSelf = {
-    expr = slib.umportNixModules {
-      paths = [./.];
-      exclude = [./.];
-    };
-    expected = [./default.nix];
+  testUmportHome = {
+    expr =
+      slib.umportHomeModules
+      {
+        paths = [../templates];
+      }
+      # Username list to apply homeModules to.
+      ["anon"];
+    expected = [
+      ../templates/module1/home.nix
+    ];
   };
 }

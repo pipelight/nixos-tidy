@@ -28,19 +28,20 @@
       # templates = {
       #   default = ./templates/default.nix;
       # };
-      slib = {
-        umport = (import ./lib/utils.nix {inherit (nixpkgs) lib nixosModules;}).umport;
-        umport-home =
-          (import ./lib/umport.nix {
-            inherit slib;
-            inherit (nixpkgs) lib nixosModules;
-          })
-          .umport-home;
-      };
-      tests = import ./lib/test.utils.nix {
-        inherit slib;
-        inherit (nixpkgs) lib nixosModules;
-      };
+      slib =
+        {}
+        // (import ./lib/umport/utils.nix {inherit (nixpkgs) lib;});
+
+      tests =
+        {}
+        // import ./lib/home-merger/test.nix {
+          inherit slib;
+          inherit (nixpkgs) lib;
+        }
+        // import ./lib/umport/test.nix {
+          inherit slib;
+          inherit (nixpkgs) lib;
+        };
     }
     // inputs.flake-utils.lib.eachDefaultSystem (system: let
       lib = self.lib;
