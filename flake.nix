@@ -30,8 +30,16 @@
       # };
       slib =
         {}
-        // (import ./lib/umport {inherit (nixpkgs) lib;})
-        // (import ./lib/home-merger {inherit (nixpkgs) lib;});
+        // (import ./lib/home-merger {
+          inherit slib;
+          inherit (nixpkgs) lib;
+        })
+        // (import ./lib/umport {
+          inherit self;
+          inherit inputs;
+          inherit slib;
+          inherit (nixpkgs) lib;
+        });
 
       tests =
         {}
@@ -40,6 +48,8 @@
           inherit (nixpkgs) lib;
         }
         // import ./lib/umport/test.nix {
+          inherit self;
+          inherit inputs;
           inherit slib;
           inherit (nixpkgs) lib;
         };

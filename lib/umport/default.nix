@@ -10,23 +10,25 @@ Features:
 */
 {
   lib,
-  # nixosModules,
+  slib,
+  inputs,
   ...
-}: let
+}:
+with slib; let
   ## Filters
   /*
   A filter for nix modules files only.
    - follow this globbing pattern *.nix
    - rejects home modules *.home.*.nix
   */
-  filterNixModules = {exclude ? []} @ args: path:
+  _filterNixModules = {exclude ? []} @ args: path:
     with lib;
     with fileset;
       pathIsRegularFile path
       && hasSuffix ".nix" (builtins.toString path)
       # Reject home modules
-      && !hasInfix "home." (builtins.toString path)
-      && !hasInfix "home_" (builtins.toString path)
+      && !(hasInfix "home." (builtins.toString path)
+        || hasInfix "home_" (builtins.toString path))
       && !isExcluded {
         inherit exclude;
         inherit path;
@@ -36,13 +38,13 @@ Features:
   A filter for home modules files only
   - follows this globbing pattern home.*.nix
   */
-  filterHomeModules = {exclude ? []} @ args: path:
+  _filterHomeModules = {exclude ? []} @ args: path:
     with lib;
     with fileset;
       pathIsRegularFile path
       && hasSuffix ".nix" (builtins.toString path)
-      && hasInfix "home." (builtins.toString path)
-      && hasInfix "home_" (builtins.toString path)
+      && (hasInfix "home." (builtins.toString path)
+        || hasInfix "home_" (builtins.toString path))
       && !isExcluded {
         inherit exclude;
         inherit path;
@@ -52,16 +54,16 @@ Features:
   A filter for home modules files only
   - follows this globbing pattern test.*.nix
   */
-  filterTestModules = {exclude ? []} @ args: path:
+  _filterTestModules = {exclude ? []} @ args: path:
     with lib;
     with fileset;
       pathIsRegularFile path
       && hasSuffix ".nix" (builtins.toString path)
-      && hasInfix "test." (builtins.toString path)
-      && hasInfix "test_" (builtins.toString path)
+      && (hasInfix "test." (builtins.toString path)
+        || hasInfix "test_" (builtins.toString path))
       # Reject home modules
-      && !hasInfix "home." (builtins.toString path)
-      && !hasInfix "home_" (builtins.toString path)
+      && (!hasInfix "home." (builtins.toString path)
+        || !hasInfix "home_" (builtins.toString path))
       && !isExcluded {
         inherit exclude;
         inherit path;
@@ -107,7 +109,7 @@ Features:
     with fileset;
       unique (
         filter
-        (filterNixModules {
+        (_filterNixModules {
           inherit exclude;
         })
         (concatMap (path: toList path) paths)
@@ -126,25 +128,16 @@ Features:
   umportHomeModules = {
     paths ? [],
     exclude ? [],
-  } @ args: users:
+  } @ args:
     with lib;
-    with fileset; let
-      home-merger = import ./home-merger.nix;
-    in {
-      nixosModules.home-merger = {
-        extraSpecialArgs = {
-          inherit inputs cfg pkgs-stable pkgs-unstable pkgs-deprecated;
-        };
-        users = cfg.users;
-        modules = unique (
-          filter
-          (filterNixModules {
-            inherit exclude;
-          })
-          (concatMap (path: toList path) paths)
-        );
-      };
-    };
+    with fileset;
+      unique (
+        filter
+        (_filterHomeModules {
+          inherit exclude;
+        })
+        (concatMap (path: toList path) paths)
+      );
 
   /*
   Import recursively every files from paths.
@@ -161,14 +154,30 @@ Features:
     with fileset;
       unique (
         filter
-        (filterNixModules {
+        (_filterNixModules {
           inherit exclude;
         })
         (concatMap (path: toList path) paths)
       );
+
+  umportAllModules = {
+    paths ? [],
+    exclude ? [],
+  } @ umportArgs: {
+    users ? ["anon"],
+    stateVersion ? "25.05",
+    useGlobalPkgs ? true,
+    extraSpecialArgs ? {},
+  } @ homeArgs: let
+    homeManagerModule = inputs.home-manager.nixosModules.home-manager;
+  in
+    []
+    ++ umportNixModules umportArgs
+    ++ [homeManagerModule (mkHydratedHomeModuleWrapper homeArgs umportArgs)];
 in {
   inherit isExcluded;
   inherit umportNixModules;
   inherit umportHomeModules;
   inherit umportTestModules;
+  inherit umportAllModules;
 }

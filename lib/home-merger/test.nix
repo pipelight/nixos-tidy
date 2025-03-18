@@ -2,15 +2,24 @@
   lib,
   slib,
   ...
-}: {
+}:
+with slib; {
   /*
   Test umport with a top directory.
   */
   testMkModuleWrapper = {
-    expr = slib.mkModuleWrapper {paths = [../templates];};
-    expected = [
-      ../templates/default.nix
-      ../templates/module1/default.nix
-    ];
+    expr = _mkHomeModuleWrapper {};
+    expected = {
+      home-manager = {
+        useGlobalPkgs = true;
+        extraSpecialArgs = {};
+        users = {
+          anon = {
+            home.stateVersion = "25.05";
+            imports = [];
+          };
+        };
+      };
+    };
   };
 }

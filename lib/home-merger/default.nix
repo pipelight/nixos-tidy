@@ -1,15 +1,21 @@
-{lib, ...}: let
+{
+  lib,
+  slib,
+  ...
+}:
+with slib; let
   /*
   Make a top level module to:
     - import every home-manager modules files.
     - apply modules to user list.
   */
-  mkHomeModuleWrapper = {
+  _mkHomeModuleWrapper = {
     users ? ["anon"],
     stateVersion ? "25.05",
     useGlobalPkgs ? true,
     extraSpecialArgs ? {},
-  } @ args:
+    imports ? [],
+  } @ homeArgs:
     with lib; {
       home-manager =
         {
@@ -21,17 +27,30 @@
             name = "users";
             value = {
               ${u} = {
-                # In general you want:
-                # home.stateVersion = config.system.stateVersion;
                 home.stateVersion = stateVersion;
-                imports = cfg.modules;
+                imports = imports;
               };
             };
           })
-          # cfg.users
           users
         );
     };
+
+  mkHydratedHomeModuleWrapper = {
+    users ? ["anon"],
+    stateVersion ? "25.05",
+    useGlobalPkgs ? true,
+    extraSpecialArgs ? {},
+  } @ homeArgs: {
+    paths ? [],
+    exclude ? [],
+  } @ umportArgs:
+    _mkHomeModuleWrapper
+    (homeArgs
+      // {
+        imports = umportHomeModules umportArgs;
+      });
 in {
-  inherit mkHomeModuleWrapper;
+  inherit mkHydratedHomeModuleWrapper;
+  inherit _mkHomeModuleWrapper;
 }
