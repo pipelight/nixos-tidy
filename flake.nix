@@ -19,68 +19,45 @@
     self,
     nixpkgs,
     ...
-  } @ inputs:
-    rec {
-      # templates = {
-      #   default = ./templates/default.nix;
-      # };
-      nixosModules = {
-        home-merger = ./modules/home-merger.nix;
-        allow-unfree = ./lib/allow-unfree.nix;
+  } @ inputs: rec {
+    templates = {
+      default = {
+        path = ./templates/default.nix;
+        description = ''
+          Top-level umport for static config generation.
+        '';
       };
+    };
+    nixosModules = {
+      home-merger = ./modules/home-merger.nix;
+      allow-unfree = ./lib/allow-unfree.nix;
+    };
 
-      lib = slib;
-      slib =
-        {}
-        // (import ./lib/home-merger {
-          inherit slib;
-          inherit (nixpkgs) lib;
-        })
-        // (import ./lib/umport {
-          inherit self;
-          inherit inputs;
-          inherit slib;
-          inherit (nixpkgs) lib;
-        });
+    lib = slib;
+    slib =
+      {}
+      // (import ./lib/home-merger {
+        inherit slib;
+        inherit (nixpkgs) lib;
+      })
+      // (import ./lib/umport {
+        inherit self;
+        inherit inputs;
+        inherit slib;
+        inherit (nixpkgs) lib;
+      });
 
-      tests =
-        {}
-        // import ./lib/home-merger/test.nix {
-          inherit slib;
-          inherit (nixpkgs) lib;
-        }
-        // import ./lib/umport/test.nix {
-          inherit self;
-          inherit inputs;
-          inherit slib;
-          inherit (nixpkgs) lib;
-        };
-    }
-    // inputs.flake-utils.lib.eachDefaultSystem (system: let
-      lib = self.lib;
-      pkgs = nixpkgs.legacyPackages.${system};
-    in {
-      # Boilerplate to run tests with lix-unit
-      # !! Unstable: not workgin for now!
-      # Will have to use nix-unit on command line: "nix-unit --flake '.#tests'"
-      checks = {
-        default =
-          pkgs.runCommand "tests" {
-            src = ./.;
-            nativeBuildInputs = [
-              inputs.lix-unit.packages.${system}.default
-            ];
-          }
-          ''
-            export HOME="$(realpath .)"
-            # The nix derivation must be able to find all used inputs
-            # in the nix-store because it cannot download it during buildTime.
-            nix-unit --eval-store "$HOME" \
-              --extra-experimental-features flakes \
-              --override-input nixpkgs ${nixpkgs} \
-              --flake ${self}#tests
-            touch $out
-          '';
+    tests =
+      {}
+      // import ./lib/home-merger/test.nix {
+        inherit slib;
+        inherit (nixpkgs) lib;
+      }
+      // import ./lib/umport/test.nix {
+        inherit self;
+        inherit inputs;
+        inherit slib;
+        inherit (nixpkgs) lib;
       };
-    });
+  };
 }
