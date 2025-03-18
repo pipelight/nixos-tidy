@@ -30,7 +30,9 @@ with slib; {
         extraSpecialArgs = {};
         users = {
           anon = {
-            imports = [../../templates/module1/home.nix];
+            imports = [
+              ../../templates/module1/home.nix
+            ];
             home.stateVersion = "25.05";
           };
         };

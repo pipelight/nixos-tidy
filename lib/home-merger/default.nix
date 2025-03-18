@@ -49,10 +49,11 @@ with slib; let
       _mkHomeModuleWrapper
       {
         inherit users stateVersion useGlobalPkgs extraSpecialArgs;
-        imports =
+        imports = unique (
           []
           ++ imports
-          ++ umportHomeModules umportArgs;
+          ++ umportHomeModules umportArgs
+        );
       };
 in {
   inherit _mkHydratedHomeModuleWrapper;
