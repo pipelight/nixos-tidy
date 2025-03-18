@@ -14,7 +14,7 @@ with slib; let
     stateVersion ? "25.05",
     useGlobalPkgs ? true,
     extraSpecialArgs ? {},
-    imports ? [],
+    ...
   } @ homeArgs:
     with lib; {
       home-manager =
@@ -49,11 +49,10 @@ with slib; let
       _mkHomeModuleWrapper
       {
         inherit users stateVersion useGlobalPkgs extraSpecialArgs;
-        imports = unique (
+        imports =
           []
           ++ imports
-          ++ umportHomeModules umportArgs
-        );
+          ++ umportHomeModules umportArgs;
       };
 in {
   inherit _mkHydratedHomeModuleWrapper;
