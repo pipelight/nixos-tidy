@@ -29,8 +29,8 @@
       };
     };
     nixosModules = {
-      home-merger = ./modules/home-merger.nix;
-      allow-unfree = ./lib/allow-unfree.nix;
+      home-merger = ./modules/home-merger/default.nix;
+      allow-unfree = ./modules/allow-unfree/default.nix;
     };
 
     lib = slib;
