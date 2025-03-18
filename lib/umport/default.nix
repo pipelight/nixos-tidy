@@ -165,10 +165,10 @@ with slib; let
     exclude ? [],
   } @ umportArgs: {
     users ? ["anon"],
-    modules ? [],
     stateVersion ? "25.05",
     useGlobalPkgs ? true,
     extraSpecialArgs ? {},
+    modules ? [],
   } @ homeArgs: let
     homeManagerModule = inputs.home-manager.nixosModules.home-manager;
   in

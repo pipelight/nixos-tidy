@@ -14,7 +14,7 @@ with slib; let
     stateVersion ? "25.05",
     useGlobalPkgs ? true,
     extraSpecialArgs ? {},
-    imports ? [],
+    modules ? [],
   } @ homeArgs:
     with lib; {
       home-manager =
@@ -41,6 +41,7 @@ with slib; let
     stateVersion ? "25.05",
     useGlobalPkgs ? true,
     extraSpecialArgs ? {},
+    modules ? [],
   } @ homeArgs: {
     paths ? [],
     exclude ? [],
