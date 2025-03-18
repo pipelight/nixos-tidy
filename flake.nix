@@ -41,9 +41,7 @@
         inherit (nixpkgs) lib;
       })
       // (import ./lib/umport {
-        inherit self;
-        inherit inputs;
-        inherit slib;
+        inherit self inputs slib;
         inherit (nixpkgs) lib;
       });
 
@@ -54,9 +52,7 @@
         inherit (nixpkgs) lib;
       }
       // import ./lib/umport/test.nix {
-        inherit self;
-        inherit inputs;
-        inherit slib;
+        inherit self inputs slib;
         inherit (nixpkgs) lib;
       };
   };

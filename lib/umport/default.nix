@@ -169,6 +169,7 @@ with slib; let
     useGlobalPkgs ? true,
     extraSpecialArgs ? {},
     modules ? [],
+    imports ? [],
   } @ homeArgs: let
     homeManagerModule = inputs.home-manager.nixosModules.home-manager;
   in

@@ -7,16 +7,17 @@ with slib; {
   /*
   Test umport with a top directory.
   */
-  testMkModuleWrapper = {
+  testMkHomeModuleWrapper = {
     expr = _mkHomeModuleWrapper {};
     expected = {
       home-manager = {
         useGlobalPkgs = true;
         extraSpecialArgs = {};
+        modules = [];
         users = {
           anon = {
-            home.stateVersion = "25.05";
             imports = [];
+            home.stateVersion = "25.05";
           };
         };
       };

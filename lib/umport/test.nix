@@ -60,6 +60,7 @@ with slib; {
         home-manager = {
           useGlobalPkgs = true;
           extraSpecialArgs = {};
+          modules = [];
           users = {
             anon = {
               home.stateVersion = "25.05";
