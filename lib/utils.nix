@@ -1,8 +1,20 @@
+/*
+  Fork of **Yunfachi's Umport** module.
+https://github.com/yunfachi/nypkgs/blob/master/lib/umport.nix
+
+This fork is a heavy rework of yunfachi's umport function.
+Mainly, it has been splited into understandable chunks.
+
+Features:
+- integrates home_merger.
+*/
 {lib, ...}: let
   ## Filters
-  # A filter for nix modules files only.
-  # - follow this globbing pattern *.nix
-  # - rejects home modules *.home.*.nix
+  /*
+  A filter for nix modules files only.
+   - follow this globbing pattern *.nix
+   - rejects home modules *.home.*.nix
+  */
   filter_nixModules = {exclude ? []} @ args: path:
     with lib;
     with fileset;
@@ -14,19 +26,24 @@
         inherit path;
       };
 
-  # A filter for home modules files only
-  # - follows this globbing pattern *.home.*.nix
+  /*
+  A filter for home modules files only
+  - follows this globbing pattern *.home.*.nix
+  */
   filter_homeModules = {exclude ? []} @ args: path:
     with lib;
     with fileset;
-      pathIsRegularFile file
+      pathIsRegularFile path
       && hasSuffix ".nix" (builtins.toString path)
       && hasInfix "home." (builtins.toString path)
       && !isExcluded {
         inherit exclude;
         inherit path;
       };
-  # Check if path is in the excluded file list.
+
+  /*
+  Check if path is in the excluded file list.
+  */
   isExcluded = {
     path,
     exclude ? [],
@@ -42,6 +59,20 @@
       then true
       else (filter (excludedDir: lib.path.hasPrefix excludedDir path) excludedDirs) != [];
 
+  /*
+  Import recursively every files from paths.
+
+  Usually you want top level import with.
+
+  - import every path from calling site
+    `paths = [./.]`
+  - ignore calling site to avoid infinite recursion
+    `exclude = [./default.nix]`
+
+  ```nix
+  import = umport { paths = [./.] exclude = [./default.nix]}
+  ````
+  */
   umport = {
     paths ? [],
     exclude ? [],
