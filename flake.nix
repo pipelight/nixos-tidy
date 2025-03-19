@@ -30,7 +30,9 @@
     };
     nixosModules = {
       umport = ./modules/umport/default.nix;
-      home-merger = ./modules/home-merger/default.nix;
+      home-merger =
+        import ./modules/home-merger/default.nix
+        {inherit self inputs;};
       allow-unfree = ./modules/allow-unfree/default.nix;
     };
 
@@ -46,6 +48,7 @@
         inherit (nixpkgs) lib;
       });
 
+    ## Unit tests
     tests =
       {}
       // import ./lib/home-merger/test.nix {
@@ -55,12 +58,6 @@
       // import ./lib/umport/test.nix {
         inherit self inputs slib;
         inherit (nixpkgs) lib;
-      }
-      // import ./modules/umport/test.nix {
-        inherit (nixpkgs) lib;
-        inherit (nixosModules) umport;
-        config = {
-        };
       };
   };
 }

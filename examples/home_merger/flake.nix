@@ -3,13 +3,12 @@
   inputs = {
     # NixOs pkgs
     # nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
 
     ###################################
     ## NixOs-tidy and dependencies
     nixos-tidy = {
-      url = "path:/home/anon/Fast/nixos-tidy";
-      # url = "github:pipelight/nixos-tidy";
+      url = "github:pipelight/nixos-tidy";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
@@ -41,12 +40,16 @@
       default = pkgs.lib.nixosSystem {
         specialArgs = {inherit inputs;};
         modules = [
-          ./default.nix
+          # ./default.nix
+          ../commons/configuration.nix
+          ../commons/hardware-configuration.nix
+          # inputs.nixos-tidy.nixosModules.home-merger
+          inputs.nixos-tidy.nixosModules.allow-unfree
         ];
       };
     };
-    packages."${system}" = {
-      default = nixosConfigurations.default.config.system.build.toplevel;
-    };
+    # packages."${system}" = {
+    #   default = nixosConfigurations.default.config.system.build.toplevel;
+    # };
   };
 }

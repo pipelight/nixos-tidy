@@ -17,6 +17,24 @@ Features:
 with slib; let
   ## Filters
   /*
+  Check if path is in the excluded file list.
+  */
+  _isExcluded = {
+    path,
+    exclude ? [],
+  } @ args:
+    with lib;
+    with fileset; let
+      excludedFiles = filter (path: pathIsRegularFile path) exclude;
+      excludedDirs = filter (path: pathIsDirectory path) exclude;
+    in
+      if isNull exclude
+      then false
+      else if elem path excludedFiles
+      then true
+      else (filter (excludedDir: lib.path.hasPrefix excludedDir path) excludedDirs) != [];
+
+  /*
   A filter for nix modules files only.
    - follow this globbing pattern *.nix
    - rejects home modules *.home.*.nix
@@ -29,7 +47,7 @@ with slib; let
       # Reject home modules
       && !(hasInfix "home." (builtins.toString path)
         || hasInfix "home_" (builtins.toString path))
-      && !isExcluded {
+      && !_isExcluded {
         inherit exclude;
         inherit path;
       };
@@ -45,7 +63,7 @@ with slib; let
       && hasSuffix ".nix" (builtins.toString path)
       && (hasInfix "home." (builtins.toString path)
         || hasInfix "home_" (builtins.toString path))
-      && !isExcluded {
+      && !_isExcluded {
         inherit exclude;
         inherit path;
       };
@@ -64,28 +82,12 @@ with slib; let
       # Reject home modules
       && (!hasInfix "home." (builtins.toString path)
         || !hasInfix "home_" (builtins.toString path))
-      && !isExcluded {
+      && !_isExcluded {
         inherit exclude;
         inherit path;
       };
 
-  /*
-  Check if path is in the excluded file list.
-  */
-  _isExcluded = {
-    path,
-    exclude ? [],
-  } @ args:
-    with lib;
-    with fileset; let
-      excludedFiles = filter (path: pathIsRegularFile path) exclude;
-      excludedDirs = filter (path: pathIsDirectory path) exclude;
-    in
-      if isNull exclude
-      then false
-      else if elem path excludedFiles
-      then true
-      else (filter (excludedDir: lib.path.hasPrefix excludedDir path) excludedDirs) != [];
+  ## Getters
 
   /*
   Import recursively every files from paths.
@@ -163,7 +165,7 @@ with slib; let
   getAllModules = {
     paths ? [],
     exclude ? [],
-  } @ umportArgs: {
+  } @ getArgs: {
     users ? ["anon"],
     stateVersion ? "25.05",
     useGlobalPkgs ? true,
@@ -173,8 +175,8 @@ with slib; let
     homeManagerModule = inputs.home-manager.nixosModules.home-manager;
   in
     []
-    ++ umportNixModules umportArgs
-    ++ [homeManagerModule (_mkHydratedHomeModuleWrapper homeArgs umportArgs)];
+    ++ getNixModules getArgs
+    ++ [homeManagerModule (_mkHydratedHomeModuleWrapper homeArgs getArgs)];
 in {
   inherit _isExcluded;
 

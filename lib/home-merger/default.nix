@@ -44,7 +44,7 @@ with slib; let
   } @ homeArgs: {
     paths ? [],
     exclude ? [],
-  } @ umportArgs:
+  } @ getArgs:
     with lib;
       _mkHomeModuleWrapper
       {
@@ -52,9 +52,12 @@ with slib; let
         imports =
           []
           ++ imports
-          ++ umportHomeModules umportArgs;
+          ++ getHomeModules getArgs;
       };
+
+  umportHome = _mkHydratedHomeModuleWrapper;
 in {
   inherit _mkHydratedHomeModuleWrapper;
   inherit _mkHomeModuleWrapper;
+  inherit umportHome;
 }

@@ -1,7 +1,8 @@
 {
-  config,
   lib,
+  slib,
   inputs,
+  config,
   ...
 }: let
   homeManagerModule = inputs.home-manager.nixosModules.home-manager;
@@ -22,6 +23,7 @@ in {
         default = config.system.stateVersion;
         description = ''
           In general you want it to be the same as your system.
+          stateVersion = config.system.stateVersion;
         '';
         example = literalExpression "'25.05'";
       };
@@ -42,7 +44,7 @@ in {
           option can be used to pass additional arguments to all modules.
         '';
       };
-      modules = mkOption {
+      imports = mkOption {
         type = with types; listOf raw;
         default = [];
         example = literalExpression "[ ./home.nix, otherModule ]";
@@ -53,29 +55,6 @@ in {
     };
   };
 
-  imports = let
-    cfg = config.home-merger;
-  in [
-    homeManagerModule
-    {
-      home-manager =
-        {
-          useGlobalPkgs = true;
-          extraSpecialArgs = cfg.extraSpecialArgs;
-        }
-        // builtins.listToAttrs (
-          builtins.map (u: {
-            name = "users";
-            value = {
-              ${u} = {
-                home.stateVersion = "24.05";
-                # home.stateVersion = config.system.stateVersion;
-                imports = cfg.modules;
-              };
-            };
-          })
-          cfg.users
-        );
-    }
-  ];
+  imports = with slib;
+    umportHome config.home-merger {};
 }

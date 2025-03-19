@@ -8,8 +8,8 @@ with slib; {
   /*
   Test umport with a top directory.
   */
-  testUmport = {
-    expr = umportNixModules {
+  testGetNixModules = {
+    expr = getNixModules {
       paths = [../../templates];
     };
     expected = [
@@ -21,8 +21,8 @@ with slib; {
   /*
   Test umport with a top directory and exclude list.
   */
-  testUmportExclude = {
-    expr = umportNixModules {
+  testGetNixModulesExclude = {
+    expr = getNixModules {
       paths = [../../templates];
       exclude = [../../templates/module1];
     };
@@ -34,8 +34,8 @@ with slib; {
   /*
   Test umport home with a top directory.
   */
-  testUmportHome = {
-    expr = umportHomeModules {
+  testGetHomeModules = {
+    expr = getHomeModules {
       paths = [../../templates];
     };
     expected = [
@@ -46,9 +46,9 @@ with slib; {
   /*
   Test umport home with a top directory.
   */
-  testUmportAll = {
+  testGetAllModules = {
     expr =
-      umportAllModules {
+      getAllModules {
         paths = [../../templates];
       }
       {};
