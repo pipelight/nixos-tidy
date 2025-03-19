@@ -4,11 +4,12 @@ name = "tests"
 [[pipelines.steps]]
 name = "lib-tests"
 commands = ["""
-  pipelight run lib-tests
+  pipelight run lib-tests --attach
 """]
+[[pipelines.steps]]
 name = "module-tests"
 commands = ["""
-  pipelight run module-tests
+  pipelight run module-tests --attach
 """]
 
 [[pipelines]]
@@ -24,7 +25,7 @@ commands = ["""
 name = "module-tests"
 
 [[pipelines.steps]]
-name = "run nixosConfiguration tests"
+name = "run home-merger module tests"
 commands = ["""
   nixos-rebuild build \
   --flake './examples/home_merger#default' \
@@ -32,9 +33,9 @@ commands = ["""
 """]
 
 [[pipelines.steps]]
-name = "run nixosConfiguration tests"
+name = "run umport module tests"
 commands = ["""
   nixos-rebuild build \
-  --flake './examples/home_merger#default' \
+  --flake './examples/umport#default' \
   --override-input nixos-tidy ./
 """]

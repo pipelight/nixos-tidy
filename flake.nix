@@ -33,7 +33,6 @@
     slib =
       {}
       // (import ./lib/umport {
-        # inherit inputs;
         inherit (nixpkgs) lib;
       });
 
@@ -47,7 +46,7 @@
     tests =
       {}
       // import ./lib/umport/test.nix {
-        inherit inputs slib;
+        inherit slib;
         inherit (nixpkgs) lib;
       };
   };

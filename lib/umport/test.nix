@@ -4,6 +4,16 @@
   ...
 }:
 with slib; {
+  testGetPaths = {
+    expr = _getPaths [../../templates];
+    expected = [
+      ../../templates
+    ];
+  };
+  testGetModules = {
+    expr = _getModules [../../templates];
+    expected = [];
+  };
   /*
   Test umport with a top directory.
   */
@@ -54,7 +64,6 @@ with slib; {
     expected = [
       ../../templates/default.nix
       ../../templates/module1/default.nix
-      inputs.home-manager.nixosModules.home-manager
       {
         home-manager = {
           useGlobalPkgs = true;

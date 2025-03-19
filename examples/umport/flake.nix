@@ -29,7 +29,9 @@
       default = pkgs.lib.nixosSystem {
         specialArgs = {inherit inputs;};
         modules = [
-          ./default.nix
+          inputs.nixos-tidy.nixosModules.umport
+          ../commons/configuration.nix
+          ../commons/hardware-configuration.nix
         ];
       };
     };

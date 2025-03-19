@@ -18,7 +18,7 @@ in {
         '';
       };
       stateVersion = mkOption {
-        types = string;
+        type = with types; str;
         default = config.system.stateVersion;
         description = ''
           In general you want it to be the same as your system.
@@ -26,14 +26,19 @@ in {
         '';
         example = literalExpression "'25.05'";
       };
-      useGloblalPkgs = mkEnableOption ''
-        By default,
-        Home Manager uses a private pkgs instance
-        that is configured via the home-manager.users..nixpkgs options.
+      useGlobalPkgs = mkOption {
+        type = with types; bool;
+        default = true;
+        description = ''
+          By default,
+          Home Manager uses a private pkgs instance
+          that is configured via the home-manager.users..nixpkgs options.
 
-        Enable to instead use the global pkgs
-        that is configured via the system level nixpkgs options
-      '';
+          Enable to instead use the global pkgs
+          that is configured via the system level nixpkgs options
+        '';
+        example = true;
+      };
       extraSpecialArgs = mkOption {
         type = with types; attrs;
         default = {};
@@ -51,19 +56,29 @@ in {
           Modules to add to the user configuration.
         '';
       };
+      umports = mkOption {
+        type = with types; listOf raw;
+        default = [];
+        example = literalExpression "[ ./. ]";
+        description = ''
+          Modules to add to the user configuration.
+        '';
+      };
     };
   };
 
   imports = with slib; let
     homeManagerModule = inputs.home-manager.nixosModules.home-manager;
     cfg = config.home-merger;
-  in [
-    homeManagerModule
-    (
-      _mkHomeModuleWrapper {
-        # Need to spread config args to avoid infinite recursion
-        inherit (cfg) users stateVersion useGlobalPkgs extraSpecialArgs imports;
-      }
-    )
-  ];
+  in
+    [
+      homeManagerModule
+    ]
+    # One should not duplicate paths in umport and import.
+    ++ umportHomeModules {paths = _getPaths cfg.umports;}
+    # ++ umportHomeModules {paths = cfg.umports;}
+    {
+      inherit (cfg) users stateVersion useGlobalPkgs extraSpecialArgs;
+      # imports = _getModules cfg.umports ++ _getModules cfg.imports;
+    };
 }

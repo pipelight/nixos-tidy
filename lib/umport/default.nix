@@ -11,6 +11,27 @@ Features:
 {lib}: let
   ## Filters
   /*
+  Remove everything that is not a path from list.
+  */
+  _getPaths = list:
+    with lib;
+      unique (
+        filter isPath list
+      );
+
+  /*
+  Remove everything that is a path from list.
+  */
+  _getModules = list:
+    with lib;
+      unique (
+        filter _isNotPath list
+      );
+  _isNotPath = raw:
+    with lib;
+      !isPath raw;
+
+  /*
   Check if path is in the excluded file list.
   */
   _isExcluded = {
@@ -235,6 +256,8 @@ Features:
     };
 in {
   inherit _isExcluded;
+  inherit _getPaths;
+  inherit _getModules;
 
   inherit getNixModules;
   inherit getHomeModules;
