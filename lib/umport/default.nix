@@ -72,7 +72,7 @@ with slib; let
   /*
   Check if path is in the excluded file list.
   */
-  isExcluded = {
+  _isExcluded = {
     path,
     exclude ? [],
   } @ args:
@@ -101,7 +101,7 @@ with slib; let
   import = umportNixModules { paths = [./.] exclude = [./default.nix]}
   ````
   */
-  umportNixModules = {
+  getNixModules = {
     paths ? [],
     exclude ? [],
   } @ args:
@@ -125,7 +125,7 @@ with slib; let
   import = umportHomeModules { paths = [./.]}
   ````
   */
-  umportHomeModules = {
+  getHomeModules = {
     paths ? [],
     exclude ? [],
   } @ args:
@@ -146,7 +146,7 @@ with slib; let
   import = umportTestModules { paths = [./.]}
   ````
   */
-  umportTestModules = {
+  getTestModules = {
     paths ? [],
     exclude ? [],
   } @ args:
@@ -160,7 +160,7 @@ with slib; let
         (concatMap (path: toList path) paths)
       );
 
-  umportAllModules = {
+  getAllModules = {
     paths ? [],
     exclude ? [],
   } @ umportArgs: {
@@ -176,9 +176,11 @@ with slib; let
     ++ umportNixModules umportArgs
     ++ [homeManagerModule (_mkHydratedHomeModuleWrapper homeArgs umportArgs)];
 in {
-  inherit isExcluded;
-  inherit umportNixModules;
-  inherit umportHomeModules;
-  inherit umportTestModules;
-  inherit umportAllModules;
+  inherit _isExcluded;
+
+  inherit getNixModules;
+  inherit getHomeModules;
+  inherit getTestModules;
+
+  inherit getAllModules;
 }

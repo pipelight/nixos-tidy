@@ -29,6 +29,7 @@
       };
     };
     nixosModules = {
+      umport = ./modules/umport/default.nix;
       home-merger = ./modules/home-merger/default.nix;
       allow-unfree = ./modules/allow-unfree/default.nix;
     };
@@ -54,6 +55,12 @@
       // import ./lib/umport/test.nix {
         inherit self inputs slib;
         inherit (nixpkgs) lib;
+      }
+      // import ./modules/umport/test.nix {
+        inherit (nixpkgs) lib;
+        inherit (nixosModules) umport;
+        config = {
+        };
       };
   };
 }
