@@ -1,31 +1,19 @@
 {
-  description = "A flake that uses yunfachi's umport";
+  description = "A flake that uses nixos-tidy umport";
   inputs = {
-    # NixOs pkgs
-    # nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
+
+    nixos-tidy = {
+      url = "github:pipelight/nixos-tidy";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     ###################################
     ## NixOs-tidy and dependencies
-    nixos-tidy = {
-      url = "path:/home/anon/Fast/nixos-tidy";
-      # url = "github:pipelight/nixos-tidy";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    ###################################
-    ## Optional good stuffs
-    # NUR - Nix User Repository
-    # nur.url = "github:nix-community/NUR";
-
-    # Utils
-    # flake-utils.url = "github:numtide/flake-utils";
-    # flake-parts.url = "github:hercules-ci/flake-parts";
-    # impermanence.url = "github:nix-community/impermanence";
   };
 
   outputs = {

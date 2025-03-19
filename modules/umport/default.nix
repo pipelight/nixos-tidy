@@ -1,10 +1,9 @@
 {
   config,
   lib,
-  inputs,
   ...
 }: let
-  # homeManagerModule = inputs.home-manager.nixosModules.home-manager;
+  slib = import ../../lib/umport/default.nix {inherit lib;};
 in {
   # Set the module options
   options = with lib; {
@@ -39,4 +38,6 @@ in {
       '';
     };
   };
+
+  imports = with slib; umportAllModules {path = config.umport;} config.home-merger;
 }

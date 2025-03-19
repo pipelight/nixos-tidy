@@ -5,26 +5,17 @@
     # nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
 
-    ###################################
-    ## NixOs-tidy and dependencies
     nixos-tidy = {
       url = "github:pipelight/nixos-tidy";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    ###################################
+    ## NixOs-tidy and dependencies
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    ###################################
-    ## Optional good stuffs
-    # NUR - Nix User Repository
-    # nur.url = "github:nix-community/NUR";
-
-    # Utils
-    # flake-utils.url = "github:numtide/flake-utils";
-    # flake-parts.url = "github:hercules-ci/flake-parts";
-    # impermanence.url = "github:nix-community/impermanence";
   };
 
   outputs = {
@@ -40,16 +31,12 @@
       default = pkgs.lib.nixosSystem {
         specialArgs = {inherit inputs;};
         modules = [
-          # ./default.nix
+          inputs.nixos-tidy.nixosModules.home-merger
+          inputs.nixos-tidy.nixosModules.allow-unfree
           ../commons/configuration.nix
           ../commons/hardware-configuration.nix
-          # inputs.nixos-tidy.nixosModules.home-merger
-          inputs.nixos-tidy.nixosModules.allow-unfree
         ];
       };
     };
-    # packages."${system}" = {
-    #   default = nixosConfigurations.default.config.system.build.toplevel;
-    # };
   };
 }

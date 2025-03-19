@@ -2,9 +2,33 @@
 name = "tests"
 
 [[pipelines.steps]]
+name = "lib-tests"
+commands = ["""
+  pipelight run lib-tests
+"""]
+name = "module-tests"
+commands = ["""
+  pipelight run module-tests
+"""]
+
+[[pipelines]]
+name = "lib-tests"
+
+[[pipelines.steps]]
 name = "run lix-unit tests"
 commands = ["""
   nix-unit --flake '.#tests'
+"""]
+
+[[pipelines]]
+name = "module-tests"
+
+[[pipelines.steps]]
+name = "run nixosConfiguration tests"
+commands = ["""
+  nixos-rebuild build \
+  --flake './examples/home_merger#default' \
+  --override-input nixos-tidy ./
 """]
 
 [[pipelines.steps]]

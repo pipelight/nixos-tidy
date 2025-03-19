@@ -8,13 +8,7 @@ Mainly, it has been splited into understandable chunks.
 Features:
 - integrates home_merger.
 */
-{
-  lib,
-  slib,
-  inputs,
-  ...
-}:
-with slib; let
+{lib}: let
   ## Filters
   /*
   Check if path is in the excluded file list.
@@ -90,7 +84,7 @@ with slib; let
   ## Getters
 
   /*
-  Import recursively every files from paths.
+  Return a list of every files from paths.
 
   Usually you want top level import with.
 
@@ -100,9 +94,10 @@ with slib; let
     `exclude = [./default.nix]`
 
   ```nix
-  import = umportNixModules { paths = [./.] exclude = [./default.nix]}
+  import = getNixModules { paths = [./.] exclude = [./default.nix]}
   ````
   */
+  umportNixModules = getNixModules;
   getNixModules = {
     paths ? [],
     exclude ? [],
@@ -118,13 +113,13 @@ with slib; let
       );
 
   /*
-  Import recursively every files from paths.
+  Return a list of every home files from paths.
 
   Ignores `default.nix` and *.nix by default
   so no need to add `exclude = [./default.nix]`
 
   ```nix
-  import = umportHomeModules { paths = [./.]}
+  import = getHomeModules { paths = [./.]}
   ````
   */
   getHomeModules = {
@@ -142,12 +137,13 @@ with slib; let
       );
 
   /*
-  Import recursively every files from paths.
+  Return a list of every test files from paths.
 
   ```nix
-  import = umportTestModules { paths = [./.]}
+  import = getTestModules { paths = [./.]}
   ````
   */
+  umportTestModules = getTestModules;
   getTestModules = {
     paths ? [],
     exclude ? [],
@@ -162,7 +158,7 @@ with slib; let
         (concatMap (path: toList path) paths)
       );
 
-  getAllModules = {
+  umportAllModules = {
     paths ? [],
     exclude ? [],
   } @ getArgs: {
@@ -171,12 +167,72 @@ with slib; let
     useGlobalPkgs ? true,
     extraSpecialArgs ? {},
     imports ? [],
-  } @ homeArgs: let
-    homeManagerModule = inputs.home-manager.nixosModules.home-manager;
-  in
+  } @ homeArgs:
     []
     ++ getNixModules getArgs
-    ++ [homeManagerModule (_mkHydratedHomeModuleWrapper homeArgs getArgs)];
+    ++ [(_mkHydratedHomeModuleWrapper homeArgs getArgs)];
+
+  umportHomeModules = {
+    paths ? [],
+    exclude ? [],
+  } @ getArgs: {
+    users ? ["anon"],
+    stateVersion ? "25.05",
+    useGlobalPkgs ? true,
+    extraSpecialArgs ? {},
+    imports ? [],
+  } @ homeArgs:
+    []
+    ++ [(_mkHydratedHomeModuleWrapper homeArgs getArgs)];
+
+  /*
+  Make a top level module to:
+    - import every home-manager modules files.
+    - apply modules to user list.
+  */
+  _mkHomeModuleWrapper = {
+    users ? ["anon"],
+    stateVersion ? "25.05",
+    useGlobalPkgs ? true,
+    extraSpecialArgs ? {},
+    imports ? [],
+  } @ homeArgs: {
+    home-manager =
+      {
+        inherit useGlobalPkgs extraSpecialArgs;
+      }
+      // builtins.listToAttrs (
+        builtins.map (u: {
+          name = "users";
+          value = {
+            ${u} = {
+              inherit imports;
+              home.stateVersion = stateVersion;
+            };
+          };
+        })
+        users
+      );
+  };
+
+  _mkHydratedHomeModuleWrapper = {
+    users ? ["anon"],
+    stateVersion ? "25.05",
+    useGlobalPkgs ? true,
+    extraSpecialArgs ? {},
+    imports ? [],
+  } @ homeArgs: {
+    paths ? [],
+    exclude ? [],
+  } @ getArgs:
+    _mkHomeModuleWrapper
+    {
+      inherit users stateVersion useGlobalPkgs extraSpecialArgs;
+      imports =
+        []
+        ++ imports
+        ++ getHomeModules getArgs;
+    };
 in {
   inherit _isExcluded;
 
@@ -184,5 +240,12 @@ in {
   inherit getHomeModules;
   inherit getTestModules;
 
-  inherit getAllModules;
+  inherit _mkHydratedHomeModuleWrapper;
+  inherit _mkHomeModuleWrapper;
+
+  inherit umportNixModules;
+  inherit umportTestModules;
+
+  inherit umportAllModules;
+  inherit umportHomeModules;
 }

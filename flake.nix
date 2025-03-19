@@ -28,35 +28,26 @@
         '';
       };
     };
-    nixosModules = {
-      umport = ./modules/umport/default.nix;
-      home-merger =
-        import ./modules/home-merger/default.nix
-        {inherit self inputs;};
-      allow-unfree = ./modules/allow-unfree/default.nix;
-    };
 
     lib = slib;
     slib =
       {}
-      // (import ./lib/home-merger {
-        inherit slib;
-        inherit (nixpkgs) lib;
-      })
       // (import ./lib/umport {
-        inherit self inputs slib;
+        # inherit inputs;
         inherit (nixpkgs) lib;
       });
+
+    nixosModules = {
+      umport = ./modules/umport/default.nix;
+      home-merger = ./modules/home-merger/default.nix;
+      allow-unfree = ./modules/allow-unfree/default.nix;
+    };
 
     ## Unit tests
     tests =
       {}
-      // import ./lib/home-merger/test.nix {
-        inherit slib;
-        inherit (nixpkgs) lib;
-      }
       // import ./lib/umport/test.nix {
-        inherit self inputs slib;
+        inherit inputs slib;
         inherit (nixpkgs) lib;
       };
   };

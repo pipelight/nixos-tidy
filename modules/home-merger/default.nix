@@ -1,11 +1,10 @@
 {
   lib,
-  slib,
   inputs,
   config,
   ...
 }: let
-  homeManagerModule = inputs.home-manager.nixosModules.home-manager;
+  slib = import ../../lib/umport/default.nix {inherit lib;};
 in {
   # Set the module options
   options = with lib; {
@@ -55,6 +54,16 @@ in {
     };
   };
 
-  imports = with slib;
-    umportHome config.home-merger {};
+  imports = with slib; let
+    homeManagerModule = inputs.home-manager.nixosModules.home-manager;
+    cfg = config.home-merger;
+  in [
+    homeManagerModule
+    (
+      _mkHomeModuleWrapper {
+        # Need to spread config args to avoid infinite recursion
+        inherit (cfg) users stateVersion useGlobalPkgs extraSpecialArgs imports;
+      }
+    )
+  ];
 }
