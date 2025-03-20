@@ -28,7 +28,7 @@ name = "module-tests"
 name = "run home-merger module tests"
 commands = ["""
   nixos-rebuild build \
-  --flake './examples/home_merger#default' \
+  --flake './templates/home-merger#default' \
   --override-input nixos-tidy ./
 """]
 
@@ -36,6 +36,6 @@ commands = ["""
 name = "run umport module tests"
 commands = ["""
   nixos-rebuild build \
-  --flake './examples/umport#default' \
+  --flake './templates/umport#default' \
   --override-input nixos-tidy ./
 """]
