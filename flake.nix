@@ -34,6 +34,12 @@
       {}
       // (import ./lib/umports {
         inherit (nixpkgs) lib;
+      })
+      // (import ./lib/users {
+        inherit (nixpkgs) lib;
+      })
+      // (import ./lib/network {
+        inherit (nixpkgs) lib;
       });
 
     nixosModules = {
@@ -43,10 +49,17 @@
 
     ## Unit tests
     tests =
-      {}
-      // import ./lib/umports/test.nix {
+      (import ./lib/umports/test.nix {
         inherit slib;
         inherit (nixpkgs) lib;
-      };
+      })
+      // (import ./lib/users/test.nix {
+        inherit slib;
+        inherit (nixpkgs) lib;
+      })
+      // (import ./lib/network/test.nix {
+        inherit slib;
+        inherit (nixpkgs) lib;
+      });
   };
 }

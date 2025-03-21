@@ -80,20 +80,21 @@ in {
   imports = with slib; let
     homeManagerModule = inputs.home-manager.nixosModules.home-manager;
     cfg = config.home-merger;
+    users = ensureUsers config config.home-merger.users;
   in
     [
       homeManagerModule
     ]
     # One should not duplicate paths in umport and import.
-    ++ umportHomeModules {
-      paths = _getPaths cfg.umports.paths;
-      exclude = _getPaths cfg.umports.exclude;
-    }
-    # ++ umportHomeModules {paths = cfg.umports;}
-    {
-      inherit (cfg) users stateVersion useGlobalPkgs extraSpecialArgs;
-      imports =
-        _getModules cfg.umports.paths
-        ++ _getModules cfg.imports;
-    };
+    ++ (umportHomeModules {
+        paths = _getPaths cfg.umports.paths;
+        exclude = _getPaths cfg.umports.exclude;
+      }
+      # ++ umportHomeModules {paths = cfg.umports;}
+      {
+        inherit (cfg) users stateVersion useGlobalPkgs extraSpecialArgs;
+        imports =
+          _getModules cfg.umports.paths
+          ++ _getModules cfg.imports;
+      });
 }
