@@ -1,5 +1,7 @@
 # Nixos-tidy
 
+<img src="./public/images/nixos-tidy.png" width="300px"/>
+
 Nix library and Nix modules
 to ease the creation of
 **sharable, flexible and standardized Nixos configurations**.

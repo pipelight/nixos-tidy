@@ -79,6 +79,6 @@ in {
     # ++ umportHomeModules {paths = cfg.umports;}
     {
       inherit (cfg) users stateVersion useGlobalPkgs extraSpecialArgs;
-      # imports = _getModules cfg.umports ++ _getModules cfg.imports;
+      imports = _getModules cfg.umports ++ _getModules cfg.imports;
     };
 }

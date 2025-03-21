@@ -27,6 +27,8 @@ name = "module-tests"
 [[pipelines.steps]]
 name = "run home-merger module tests"
 commands = ["""
+  nix flake update --flake ./templates/home-merger
+  """, """
   nixos-rebuild build \
   --flake './templates/home-merger#default' \
   --override-input nixos-tidy ./
@@ -35,6 +37,8 @@ commands = ["""
 [[pipelines.steps]]
 name = "run umport module tests"
 commands = ["""
+  nix flake update --flake ./templates/umport
+  """, """
   nixos-rebuild build \
   --flake './templates/umport#default' \
   --override-input nixos-tidy ./

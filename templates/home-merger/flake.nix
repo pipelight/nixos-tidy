@@ -1,5 +1,5 @@
 {
-  description = "A flake that uses home-merger";
+  description = "A flake that uses nixos-tidy home-merger";
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
 
