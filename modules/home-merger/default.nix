@@ -57,7 +57,7 @@ in {
         '';
       };
       umports = {
-        path = mkOption {
+        paths = mkOption {
           type = with types; listOf raw;
           default = [];
           example = literalExpression "[ ./. ]";
@@ -92,6 +92,8 @@ in {
     # ++ umportHomeModules {paths = cfg.umports;}
     {
       inherit (cfg) users stateVersion useGlobalPkgs extraSpecialArgs;
-      imports = _getModules cfg.umports.paths ++ _getModules cfg.imports;
+      imports =
+        _getModules cfg.umports.paths
+        ++ _getModules cfg.imports;
     };
 }

@@ -22,7 +22,7 @@
   } @ inputs: rec {
     templates = {
       default = {
-        path = ./templates/default.nix;
+        path = ./templates/umports/default.nix;
         description = ''
           Top-level umports for static config generation.
         '';
@@ -32,12 +32,11 @@
     lib = slib;
     slib =
       {}
-      // (import ./lib/umport {
+      // (import ./lib/umports {
         inherit (nixpkgs) lib;
       });
 
     nixosModules = {
-      umport = ./modules/umports/default.nix;
       home-merger = ./modules/home-merger/default.nix;
       allow-unfree = ./modules/allow-unfree/default.nix;
     };

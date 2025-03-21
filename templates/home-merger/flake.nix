@@ -59,6 +59,8 @@
             home-merger = {
               users = ["anon"];
               extraSpecialArgs = {inherit inputs;};
+
+              # You can use default import or the recursive one (umport).
               umports.paths = [
                 ./.
                 inputs.nur.modules.homeManager.default

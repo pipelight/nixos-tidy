@@ -52,34 +52,6 @@ with slib; {
     ];
   };
 
-  /*
-  Test umport home with a top directory.
-  */
-  testUmportAllModules = {
-    expr =
-      umportAllModules {
-        paths = [../../templates/umports];
-      }
-      {};
-    expected = [
-      ../../templates/umports/flake.nix
-      ../../templates/umports/my_module/default.nix
-      {
-        home-manager = {
-          useGlobalPkgs = true;
-          extraSpecialArgs = {};
-          users = {
-            anon = {
-              home.stateVersion = "25.05";
-              imports = [
-                ../../templates/umports/my_module/home.nix
-              ];
-            };
-          };
-        };
-      }
-    ];
-  };
   testMkHomeModuleWrapper = {
     expr = _mkHomeModuleWrapper {};
     expected = {
@@ -99,7 +71,7 @@ with slib; {
     expr =
       _mkHydratedHomeModuleWrapper
       {}
-      {paths = [../../templates/umports];};
+      [../../templates/umports/my_module/home.nix];
     expected = {
       home-manager = {
         useGlobalPkgs = true;

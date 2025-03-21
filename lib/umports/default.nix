@@ -118,7 +118,6 @@ Features:
   import = getNixModules { paths = [./.] exclude = [./default.nix]}
   ````
   */
-  umportNixModules = getNixModules;
   getNixModules = {
     paths ? [],
     exclude ? [],
@@ -132,6 +131,24 @@ Features:
         })
         (concatMap (path: toList path) paths)
       );
+
+  umportNixModules = {
+    paths ? [],
+    exclude ? [],
+  } @ args:
+    with lib;
+    with fileset; let
+      sanitized_paths = _getPaths paths;
+      modules = _getModules paths;
+      full_list =
+        []
+        ++ getNixModules {
+          inherit exclude;
+          paths = sanitized_paths;
+        }
+        ++ modules;
+    in
+      full_list;
 
   /*
   Return a list of every home files from paths.
@@ -157,42 +174,6 @@ Features:
         (concatMap (path: toList path) paths)
       );
 
-  /*
-  Return a list of every test files from paths.
-
-  ```nix
-  import = getTestModules { paths = [./.]}
-  ````
-  */
-  umportTestModules = getTestModules;
-  getTestModules = {
-    paths ? [],
-    exclude ? [],
-  } @ args:
-    with lib;
-    with fileset;
-      unique (
-        filter
-        (_filterNixModules {
-          inherit exclude;
-        })
-        (concatMap (path: toList path) paths)
-      );
-
-  umportAllModules = {
-    paths ? [],
-    exclude ? [],
-  } @ getArgs: {
-    users ? ["anon"],
-    stateVersion ? "25.05",
-    useGlobalPkgs ? true,
-    extraSpecialArgs ? {},
-    imports ? [],
-  } @ homeArgs:
-    []
-    ++ getNixModules getArgs
-    ++ [(_mkHydratedHomeModuleWrapper homeArgs getArgs)];
-
   umportHomeModules = {
     paths ? [],
     exclude ? [],
@@ -203,8 +184,36 @@ Features:
     extraSpecialArgs ? {},
     imports ? [],
   } @ homeArgs:
-    []
-    ++ [(_mkHydratedHomeModuleWrapper homeArgs getArgs)];
+    with lib;
+    with fileset; let
+      sanitized_paths = _getPaths paths;
+      modules = _getModules paths;
+      full_list =
+        []
+        ++ (getHomeModules {
+          inherit exclude;
+          paths = sanitized_paths;
+        })
+        ++ modules;
+    in
+      []
+      ++ [(_mkHydratedHomeModuleWrapper homeArgs full_list)];
+
+  _mkHydratedHomeModuleWrapper = {
+    users ? ["anon"],
+    stateVersion ? "25.05",
+    useGlobalPkgs ? true,
+    extraSpecialArgs ? {},
+    imports ? [],
+  } @ homeArgs: list:
+    _mkHomeModuleWrapper
+    {
+      inherit users stateVersion useGlobalPkgs extraSpecialArgs;
+      imports =
+        []
+        ++ imports
+        ++ list;
+    };
 
   /*
   Make a top level module to:
@@ -236,24 +245,27 @@ Features:
       );
   };
 
-  _mkHydratedHomeModuleWrapper = {
-    users ? ["anon"],
-    stateVersion ? "25.05",
-    useGlobalPkgs ? true,
-    extraSpecialArgs ? {},
-    imports ? [],
-  } @ homeArgs: {
+  /*
+  Return a list of every test files from paths.
+
+  ```nix
+  import = getTestModules { paths = [./.]}
+  ````
+  */
+  umportTestModules = getTestModules;
+  getTestModules = {
     paths ? [],
     exclude ? [],
-  } @ getArgs:
-    _mkHomeModuleWrapper
-    {
-      inherit users stateVersion useGlobalPkgs extraSpecialArgs;
-      imports =
-        []
-        ++ imports
-        ++ getHomeModules getArgs;
-    };
+  } @ args:
+    with lib;
+    with fileset;
+      unique (
+        filter
+        (_filterNixModules {
+          inherit exclude;
+        })
+        (concatMap (path: toList path) paths)
+      );
 in {
   inherit _isExcluded;
   inherit _getPaths;
@@ -269,6 +281,5 @@ in {
   inherit umportNixModules;
   inherit umportTestModules;
 
-  inherit umportAllModules;
   inherit umportHomeModules;
 }
