@@ -35,11 +35,11 @@ commands = ["""
 """]
 
 [[pipelines.steps]]
-name = "run umport module tests"
+name = "run umports module tests"
 commands = ["""
-  nix flake update --flake ./templates/umport
+  nix flake update --flake ./templates/umports
   """, """
   nixos-rebuild build \
-  --flake './templates/umport#default' \
+  --flake './templates/umports#default' \
   --override-input nixos-tidy ./
 """]

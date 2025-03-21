@@ -1,5 +1,5 @@
 {
-  description = "A flake that uses nixos-tidy umport";
+  description = "A flake that uses nixos-tidy umports";
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
 
@@ -32,7 +32,7 @@
           ../commons/configuration.nix
           ../commons/hardware-configuration.nix
 
-          inputs.nixos-tidy.nixosModules.umport
+          inputs.nixos-tidy.nixosModules.umports
 
           ({
             lib,
@@ -40,7 +40,7 @@
             config,
             ...
           }: {
-            umports = [./.];
+            umports.paths = [./.];
           })
         ];
       };

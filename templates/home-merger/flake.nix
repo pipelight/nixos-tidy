@@ -59,7 +59,7 @@
             home-merger = {
               users = ["anon"];
               extraSpecialArgs = {inherit inputs;};
-              umports = [
+              umports.paths = [
                 ./.
                 inputs.nur.modules.homeManager.default
               ];

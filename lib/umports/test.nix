@@ -5,13 +5,13 @@
 }:
 with slib; {
   testGetPaths = {
-    expr = _getPaths [../../templates/umport];
+    expr = _getPaths [../../templates/umports];
     expected = [
-      ../../templates/umport
+      ../../templates/umports
     ];
   };
   testGetModules = {
-    expr = _getModules [../../templates/umport];
+    expr = _getModules [../../templates/umports];
     expected = [];
   };
   /*
@@ -19,11 +19,11 @@ with slib; {
   */
   testGetNixModules = {
     expr = getNixModules {
-      paths = [../../templates/umport];
+      paths = [../../templates/umports];
     };
     expected = [
-      ../../templates/umport/flake.nix
-      ../../templates/umport/my_module/default.nix
+      ../../templates/umports/flake.nix
+      ../../templates/umports/my_module/default.nix
     ];
   };
 
@@ -32,11 +32,11 @@ with slib; {
   */
   testGetNixModulesExclude = {
     expr = getNixModules {
-      paths = [../../templates/umport];
-      exclude = [../../templates/umport/my_module];
+      paths = [../../templates/umports];
+      exclude = [../../templates/umports/my_module];
     };
     expected = [
-      ../../templates/umport/flake.nix
+      ../../templates/umports/flake.nix
     ];
   };
 
@@ -45,10 +45,10 @@ with slib; {
   */
   testGetHomeModules = {
     expr = getHomeModules {
-      paths = [../../templates/umport];
+      paths = [../../templates/umports];
     };
     expected = [
-      ../../templates/umport/my_module/home.nix
+      ../../templates/umports/my_module/home.nix
     ];
   };
 
@@ -58,12 +58,12 @@ with slib; {
   testUmportAllModules = {
     expr =
       umportAllModules {
-        paths = [../../templates/umport];
+        paths = [../../templates/umports];
       }
       {};
     expected = [
-      ../../templates/umport/flake.nix
-      ../../templates/umport/my_module/default.nix
+      ../../templates/umports/flake.nix
+      ../../templates/umports/my_module/default.nix
       {
         home-manager = {
           useGlobalPkgs = true;
@@ -72,7 +72,7 @@ with slib; {
             anon = {
               home.stateVersion = "25.05";
               imports = [
-                ../../templates/umport/my_module/home.nix
+                ../../templates/umports/my_module/home.nix
               ];
             };
           };
@@ -99,7 +99,7 @@ with slib; {
     expr =
       _mkHydratedHomeModuleWrapper
       {}
-      {paths = [../../templates/umport];};
+      {paths = [../../templates/umports];};
     expected = {
       home-manager = {
         useGlobalPkgs = true;
@@ -107,7 +107,7 @@ with slib; {
         users = {
           anon = {
             imports = [
-              ../../templates/umport/my_module/home.nix
+              ../../templates/umports/my_module/home.nix
             ];
             home.stateVersion = "25.05";
           };

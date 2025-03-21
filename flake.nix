@@ -24,7 +24,7 @@
       default = {
         path = ./templates/default.nix;
         description = ''
-          Top-level umport for static config generation.
+          Top-level umports for static config generation.
         '';
       };
     };
@@ -37,7 +37,7 @@
       });
 
     nixosModules = {
-      umport = ./modules/umport/default.nix;
+      umport = ./modules/umports/default.nix;
       home-merger = ./modules/home-merger/default.nix;
       allow-unfree = ./modules/allow-unfree/default.nix;
     };
@@ -45,7 +45,7 @@
     ## Unit tests
     tests =
       {}
-      // import ./lib/umport/test.nix {
+      // import ./lib/umports/test.nix {
         inherit slib;
         inherit (nixpkgs) lib;
       };

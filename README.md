@@ -1,16 +1,11 @@
-# Nixos-tidy
+# Nixos-tidy - Filesystem based config.
 
 <img src="./public/images/nixos-tidy.png" width="300px"/>
 
 Nix library and Nix modules
-to ease the creation of
-**sharable, flexible and standardized Nixos configurations**.
+to ease the creation of **Nixos configurations**.
 
-You may find a complete working example in the crocuda module repository.
-Where all the magic happens in `default.nix`.
--> [crocuda.nixos](https://github.com/pipelight/crocuda.nixos).
-
-## Add to your nix config.
+## Install (add to your config).
 
 Add the flake to your existing configuration.
 
@@ -40,33 +35,13 @@ inputs = {
   };
 ```
 
-## Top-level import 🤌.
-
-A top-level import statement.
-Imports all the files from inside a directory.
-
-```nix
-imports = inputs.nixos-tidy.umport {
-    # User specific
-    paths = [./my_module];
-};
-home-merger = {
-    users = my_config.users;
-    modules = inputs.nixos-tidy.umport-home {
-        paths = [./my_module];
-    };
-};
-```
-
-Every files of this-file tree will be recursively imported
+Every files of this-file is recursively imported
 without the need of import statements.
 
-Umport makes the distinctions between module types based on
-file names.
+## A single Top-level import 🤌 (umports).
 
-- \*.nix as nix modules
-- home.nix, home.\*.nix and home\_\*.nix as home-manages modules
-- test.nix, test.\*.nix and test\_\*.nix as test modules.
+You want to separate your configuration files
+by concerns not by module types.
 
 ```sh
 .
@@ -78,5 +53,49 @@ file names.
 │   ├── default.nix
 │   ├── test.nix
 │   └── home.nix
-└── default.nix #put boilerplate code at the top-level.
+└── flake.nix # put boilerplate code at the flake top-level.
 ```
+
+Get rid of **imports** statements everywhere.
+
+A top-level import statement.
+Imports all the files from inside a directory.
+
+```nix
+umports = {
+    paths = [
+        inputs.other_module.nixosModules.default
+        ./my_module
+    ];
+};
+```
+
+Umport makes the distinctions between module types based on
+file names.
+
+- \*.nix as nix modules
+- home.nix, home.\*.nix and home\_\*.nix as home-manages modules
+- test.nix, test.\*.nix and test\_\*.nix as test modules.
+
+## Multiple home-manager declarations (Home-merger).
+
+### Top-level import (Umports)
+
+```nix
+home-merger = {
+    users = my_config.users;
+    umports.paths = [
+            inputs.other_module.homeManagerModules.default
+            ./my_module
+        ];
+    };
+};
+```
+
+## Example
+
+Minimalists examples in the `template` directory.
+
+You may find a complete working example at [crocuda.nixos](https://github.com/pipelight/crocuda.nixos).
+
+Where all the magic happens in `default.nix`.

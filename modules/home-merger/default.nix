@@ -4,7 +4,7 @@
   config,
   ...
 }: let
-  slib = import ../../lib/umport/default.nix {inherit lib;};
+  slib = import ../../lib/umports/default.nix {inherit lib;};
 in {
   # Set the module options
   options = with lib; {
@@ -56,13 +56,23 @@ in {
           Modules to add to the user configuration.
         '';
       };
-      umports = mkOption {
-        type = with types; listOf raw;
-        default = [];
-        example = literalExpression "[ ./. ]";
-        description = ''
-          Modules to add to the user configuration.
-        '';
+      umports = {
+        path = mkOption {
+          type = with types; listOf raw;
+          default = [];
+          example = literalExpression "[ ./. ]";
+          description = ''
+            Modules to add to the user configuration.
+          '';
+        };
+        exclude = mkOption {
+          type = with types; listOf raw;
+          default = [];
+          example = literalExpression "[ ./. ]";
+          description = ''
+            Modules path to exclude from the user configuration.
+          '';
+        };
       };
     };
   };
@@ -75,10 +85,13 @@ in {
       homeManagerModule
     ]
     # One should not duplicate paths in umport and import.
-    ++ umportHomeModules {paths = _getPaths cfg.umports;}
+    ++ umportHomeModules {
+      paths = _getPaths cfg.umports.paths;
+      exclude = _getPaths cfg.umports.exclude;
+    }
     # ++ umportHomeModules {paths = cfg.umports;}
     {
       inherit (cfg) users stateVersion useGlobalPkgs extraSpecialArgs;
-      imports = _getModules cfg.umports ++ _getModules cfg.imports;
+      imports = _getModules cfg.umports.paths ++ _getModules cfg.imports;
     };
 }
