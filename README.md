@@ -156,15 +156,15 @@ Unit-tests: test.nix || test.\*.nix || test\_\*.nix.
 ## A flexible home-manager (Home-merger).
 
 Use `inputs.nixos-tidy.nixosModules.home-merger`.
+Checkout module definition for
+[options list](https://github.com/pipelight/nixos-tidy/blob/master/modules/home-merger/default.nix).
 
-With home-manager, you may only declare your users config in a single place.
-It makes it difficult to have users declared in separate files.
-
-Home-merger is a wrapper around home-manager that you can call multiple times.
+Home-merger is a wrapper around home-manager that you can call multiple times,
+in order to scatter user definitions in separate files.
 
 ### Top-level import (Umports)
 
-- Use it to split user declarations.
+- Use it to split user definition.
 
 ```nix
 # file_1.nix
@@ -180,6 +180,7 @@ home-merger = {
 # file_2.nix
 home-merger = {
   users = ["bob"];
+  extraSpecialArgs = {inherit inputs;};
   imports = [
     inputs.anOtherModule.homeManagerModules.default
   ];
@@ -189,7 +190,9 @@ home-merger = {
 };
 ```
 
-- Or to import a `home.nix` module from an adjacent `default.nix` module.
+- Or use it
+  to import a `home.nix` module
+  from an adjacent `default.nix` module.
 
 ```sh
 .
