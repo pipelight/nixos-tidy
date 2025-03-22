@@ -218,7 +218,7 @@ allow-unfree = [
 Not released yet.
 Only on dev branch.
 
-Strengten ipv6 privacy configuration for
+Strengthen ipv6 privacy configuration for
 Linux kernel,
 NetworkManager,
 openvswitch,
