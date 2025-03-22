@@ -1,4 +1,4 @@
-# Nixos-tidy - Filesystem based config.
+# Nixos-tidy - Make filesystem based configurations.
 
 <img src="./public/images/nixos-tidy.png" width="300px"/>
 
