@@ -172,7 +172,7 @@ home-merger = {
 };
 ```
 
-- Or to import a home.nix module from a default.nix file.
+- Or to import a `home.nix` module from an adjacent `default.nix` module.
 
 ```sh
 .
@@ -218,8 +218,8 @@ allow-unfree = [
 Not released yet.
 Only on dev branch.
 
-Strenghten ipv6 privacy configuration for
-linux kernel,
+Strengten ipv6 privacy configuration for
+Linux kernel,
 NetworkManager,
 openvswitch,
 static configuration
