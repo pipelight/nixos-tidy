@@ -28,8 +28,20 @@ outputs = {
   nixosConfiguration = {
     default = pkgs.lib.nixosSystem {
       modules = [
-        inputs.nixos-tidy.nixosModules.umports
+        # pick some modules
         inputs.nixos-tidy.nixosModules.home-merger
+        ({
+          config,
+          pkgs,
+          lib,
+          inputs,
+          ...
+        }: let
+            # Use functions from library (umports).
+            slib = inputs.nixos-tidy.lib;
+        in {
+
+        })
       ];
     };
   }
@@ -57,10 +69,11 @@ It imports recursively all the files from inside a directory.
 
 ### Nix only (without home-manager)
 
-Use `inputs.nixos-tidy.nixosModules.umports`
-
 ```nix
-imports =
+# flake.nix
+imports = let
+  slib = inputs.nixos-tidy.lib;
+in
   []
   # Import all nixos modules recursively
   ++ slib.umportNixModules {
@@ -96,11 +109,13 @@ can lay in the same directory.
 └── flake.nix # put boilerplate code at the flake top-level.
 ```
 
-Use `inputs.nixos-tidy.nixosModules.umports`
+Use `slib = inputs.nixos-tidy.lib`
 and `inputs.nixos-tidy.nixosModules.home-merger`.
 
 ```nix
-imports =
+imports = let
+  slib = inputs.nixos-tidy.lib;
+in
   []
   # Import all nixos modules recursively
   ++ slib.umportNixModules {
