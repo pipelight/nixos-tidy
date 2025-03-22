@@ -37,7 +37,7 @@ outputs = {
           inputs,
           ...
         }: let
-            # Use functions from library (umports).
+            # Use functions from library.
             slib = inputs.nixos-tidy.lib;
         in {
 
@@ -61,6 +61,8 @@ outputs = {
   Where all the magic happens in `default.nix`.
 
 ## A single Top-level imports 🤌 (umports).
+
+Use `slib = inputs.nixos-tidy.lib`
 
 Get rid of **imports** statements everywhere.
 You only need **one top-level imports** statement.
@@ -109,9 +111,6 @@ can lay in the same directory.
 └── flake.nix # put boilerplate code at the flake top-level.
 ```
 
-Use `slib = inputs.nixos-tidy.lib`
-and `inputs.nixos-tidy.nixosModules.home-merger`.
-
 ```nix
 imports = let
   slib = inputs.nixos-tidy.lib;
@@ -155,6 +154,8 @@ Home-manager: home.nix || home.\*.nix || home\_\*.nix
 Unit-tests: test.nix || test.\*.nix || test\_\*.nix.
 
 ## A flexible home-manager (Home-merger).
+
+Use `inputs.nixos-tidy.nixosModules.home-merger`.
 
 With home-manager, you may only declare your users config in a single place.
 It makes it difficult to have users declared in separate files.
@@ -216,9 +217,9 @@ home.programs.fish.enable = true;
 
 ## Allow-unfree
 
-Cherry-pick unfree software exceptions with regexes.
-
 Use `inputs.nixos-tidy.nixosModules.allow-unfree`
+
+Cherry-pick unfree software exceptions with regexes.
 
 ```nix
 #default.nix
@@ -230,6 +231,8 @@ allow-unfree = [
 ```
 
 ## Network privacy (ipv6)
+
+Use `inputs.nixos-tidy.nixosModules.networking-privacy`
 
 Not released yet.
 Only on dev branch.
