@@ -45,7 +45,7 @@
     nixosModules = {
       home-merger = ./modules/home-merger/default.nix;
       allow-unfree = ./modules/allow-unfree/default.nix;
-      networking-privacy = ./modules/networking-privacy/default.nix;
+      # networking-privacy = ./modules/networking-privacy/default.nix;
     };
 
     ## Unit tests
