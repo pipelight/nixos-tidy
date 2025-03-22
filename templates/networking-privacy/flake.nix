@@ -37,7 +37,7 @@
           ../commons/configuration.nix
           ../commons/hardware-configuration.nix
 
-          inputs.nixos-tidy.nixosModules.networking
+          inputs.nixos-tidy.nixosModules.networking-privacy
 
           ###################################
           # You may move this module into its own file.

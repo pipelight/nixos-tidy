@@ -52,10 +52,20 @@ in {
       };
     };
   };
-  ## Default network manager connection
-  ## Or default vswitch
 
-  ## And do not use systemd-networkd
-  ## because it is lagging behind in terms of privacy features (22/05/2025)
-  ## But still force some parameters just in case.
+  /*
+  Create a default network manager connection
+  Or a default vswitch.
+
+  Prohibit systemd-networkd usage.
+  (Because it is lagging behind in terms of privacy features as of 22/05/2025)
+  But still force some parameters just in case.
+
+  */
+  imports = [
+    # Set a fixed inbound ipv6 + random outbounds
+    ./fixed.nix
+    # Set random ipv6 inbound/outbound
+    ./random.nix
+  ];
 }

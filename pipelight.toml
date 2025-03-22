@@ -2,19 +2,18 @@
 name = "tests"
 
 [[pipelines.steps]]
-name = "lib-tests"
+name = "test library"
 commands = ["""
-  pipelight run lib-tests --attach
+  pipelight run test-lib --attach
 """]
 [[pipelines.steps]]
-name = "module-tests"
+name = "test modules"
 commands = ["""
-  pipelight run module-tests --attach
+  pipelight run test-modules --attach
 """]
 
 [[pipelines]]
-name = "lib-tests"
-
+name = "test-lib"
 [[pipelines.steps]]
 name = "run lix-unit tests"
 commands = ["""
@@ -22,7 +21,28 @@ commands = ["""
 """]
 
 [[pipelines]]
-name = "module-tests"
+name = "test-modules"
+
+[[pipelines.steps]]
+name = "build home-merger template flake"
+commands = ["""
+  pipelight run test-module_home-merger --attach
+"""]
+
+[[pipelines.steps]]
+name = "build umports template flake"
+commands = ["""
+  pipelight run test-module_umports --attach
+"""]
+
+[[pipelines.steps]]
+name = "build networking-privacy template flake"
+commands = ["""
+  pipelight run test-module_network-privacy --attach
+"""]
+
+[[pipelines]]
+name = "test-module_home-merger"
 
 [[pipelines.steps]]
 name = "run home-merger module tests"
@@ -34,6 +54,9 @@ commands = ["""
   --override-input nixos-tidy ./
 """]
 
+[[pipelines]]
+name = "test-module_umports"
+
 [[pipelines.steps]]
 name = "run umports module tests"
 commands = ["""
@@ -41,5 +64,18 @@ commands = ["""
   """, """
   nixos-rebuild build \
   --flake './templates/umports#default' \
+  --override-input nixos-tidy ./
+"""]
+
+[[pipelines]]
+name = "test-module_network-privacy"
+
+[[pipelines.steps]]
+name = "run networking-privacy module tests"
+commands = ["""
+  nix flake update --flake ./templates/networking-privacy
+  """, """
+  nixos-rebuild build \
+  --flake './templates/networking-privacy#default' \
   --override-input nixos-tidy ./
 """]
