@@ -1,15 +1,34 @@
 {
-  inputs,
   config,
-  pkgs,
   lib,
   ...
 }:
 with lib; let
-  cfg = config.crocuda;
+  slib = import ../../lib/network/default.nix {inherit lib;};
+
+  cfg = config.networking.privacy;
+
+  # Dns local caching/resolver.
+  unboundEnabled = config.services.unbound.enable;
+
+  ## Globals
+
+  # Mac address
+  computed_mac = slib.str_to_mac cfg.network.privacy.ipv6.secret;
+
+  # Interface identifier
+  # From static
+  iid = cfg.ipv6.iid;
+  # From secret
+  computed_iid = slib.str_to_iid cfg.ipv6.secret;
+
+  token =
+    if (!isNull iid)
+    then iid
+    else computed_iid;
 in
-  mkIf (cfg.network.privacy.enable
-    && cfg.network.privacy.ipv6.strategy
+  mkIf (cfg.enable
+    && cfg.ipv6.strategy
     == "random") {
     ##########################
     # Force usage of ipv6 privacy extension in
@@ -36,13 +55,19 @@ in
       };
     };
 
+    ##########################
     ## dhcpcd
-    networking.dhcpcd = {
-      enable = true; #default
-      extraConfig = ''
-        nohook resolve.conf
-        slaac private
-      '';
+    networking = {
+      # Force dhcpcd usage with networkmanager (not working)
+      # for tool concistency with servers that do not use networkmanager.
+      # useDHCP = mkForce true;
+      dhcpcd = {
+        # enable = true; #default
+        extraConfig = ''
+          # nohook resolv.conf
+          # slaac private
+        '';
+      };
     };
 
     ##########################
@@ -57,15 +82,19 @@ in
 
     ## NetworkManager
     # https://www.networkmanager.dev/docs/api/latest
-    networking.networkmanager = {
+    networking.networkmanager = mkIf config.networking.networkmanager.enable {
       logLevel = "INFO";
 
       ## Use external dns -> unbound
-      dns = "none";
+      dns =
+        if unboundEnabled
+        then "none"
+        else "default";
 
-      ## Use external dhcp -> dhcpcd
-      dhcp = "dhcpcd";
-      # dhcp = "internal";
+      ## Use external dhcp -> dhcpcd (not working)
+      # Not working because of concurency error.
+      # dhcp = "dhcpcd";
+      dhcp = "internal";
 
       connectionConfig = {
         # MAC address randomization
@@ -82,11 +111,19 @@ in
             type = "ethernet";
           };
           ipv4 = {
+            dns-search = "lan";
+            # dns-priority default = 100, vpn = 50
+            dns-priority = 20;
             method = "auto";
           };
           ipv6 = {
-            # Random inbound ip
+            dns-search = "lan";
+            # Local resolver priority
+            # dns-priority default = 100, vpn = 50
+            dns-priority = 20;
             method = "auto";
+
+            # Random inbound ip
             addr-gen-mode = "stable-privacy";
 
             # Random outbound ip

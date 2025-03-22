@@ -1,26 +1,35 @@
 {
   inputs,
   config,
-  pkgs,
   lib,
   ...
 }:
 with lib; let
-  cfg = config.crocuda;
+  slib = import ../../lib/network/default.nix {inherit lib;};
 
+  cfg = config.networking.privacy;
+
+  # Dns local caching/resolver.
   unboundEnabled = config.services.unbound.enable;
 
   ## Globals
-  iid = cfg.network.privacy.ipv6.iid;
-  # computed_iid = slib.ip.str_to_iid cfg.network.privacy.ipv6.secret;
-  # token =
-  #   if (!isNull iid)
-  #   then iid
-  #   else computed_iid;
-  # computed_mac = slib.ip.str_to_mac cfg.network.privacy.ipv6.secret;
+
+  # Mac address
+  computed_mac = slib.str_to_mac cfg.network.privacy.ipv6.secret;
+
+  # Interface identifier
+  # From static
+  iid = cfg.ipv6.iid;
+  # From secret
+  computed_iid = slib.str_to_iid cfg.ipv6.secret;
+
+  token =
+    if (!isNull iid)
+    then iid
+    else computed_iid;
 in
-  mkIf (cfg.network.privacy.enable
-    && cfg.network.privacy.ipv6.strategy
+  mkIf (cfg.enable
+    && cfg.ipv6.strategy
     == "fixed") {
     ##########################
     # Force usage of ipv6 privacy extension in
@@ -76,7 +85,7 @@ in
       DHCP=yes
       # IPv6Token=::${token}
     '';
-
+    # static mac
     networking.interfaces = mkIf (!config.networking.networkmanager.enable) {
       # end0.macAddress = computed_mac;
       # eno1.macAddress = computed_mac;
@@ -124,13 +133,14 @@ in
           };
           ipv6 = {
             dns-search = "lan";
+            # Local resolver priority
             # dns-priority default = 100, vpn = 50
             dns-priority = 20;
             method = "auto";
 
             # Fixed inbound ip
             addr-gen-mode = "eui64";
-            # token = "::${token}";
+            token = "::${token}";
 
             # Random outbound ip
             ip6-privacy = 2;

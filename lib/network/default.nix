@@ -44,18 +44,10 @@ with lib; let
     iid = _hash_to_address hash step;
   in
     iid;
-  # ## Globals
-  # iid = cfg.network.privacy.ipv6.iid;
-  # computed_iid = str_to_iid cfg.network.privacy.ipv6.secret;
-  # token =
-  #   if (!isNull iid)
-  #   then iid
-  #   else computed_iid;
-  #
-  # computed_mac = str_to_mac cfg.network.privacy.ipv6.secret;
 in rec {
   inherit _str_to_hash;
 
   inherit str_to_mac;
   inherit str_to_ipv6;
+  inherit str_to_iid;
 }

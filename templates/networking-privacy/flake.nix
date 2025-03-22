@@ -46,9 +46,7 @@
             inpus,
             config,
             ...
-          }: let
-            slib = inputs.nixos-tidy.lib;
-          in {
+          }: {
             networking.privacy = {
               enable = true;
             };

@@ -1,11 +1,8 @@
 {
-  lib,
-  inputs,
   config,
+  lib,
   ...
-}: let
-  slib = import ../../lib/network/default.nix {inherit lib;};
-in {
+}: {
   # Set the module options
   options = with lib; {
     networking = {
@@ -24,7 +21,7 @@ in {
             default = config.networking.hostName;
           };
           iid = mkOption {
-            type = with types; str;
+            type = with types; nullOr str;
             description = ''
               A dummy ipv6 interface identifier (the last 64bits)
               to generate default inbound address from.
@@ -33,6 +30,7 @@ in {
             example = lib.literalExpression ''
               babe:feed:b0ba:fett
             '';
+            default = null;
           };
           strategy = mkOption {
             type = with types; enum ["fixed" "random"];
