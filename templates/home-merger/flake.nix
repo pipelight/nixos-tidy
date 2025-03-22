@@ -37,14 +37,12 @@
           ../commons/hardware-configuration.nix
 
           inputs.nixos-tidy.nixosModules.home-merger
-          inputs.nixos-tidy.nixosModules.allow-unfree
 
           ###################################
           # Top level home-merger
 
-          # No need to import home-manager anymore
-          # -- inputs.home-manager.nixosModules.home-manager
-
+          # No need to import home-manager
+          # as it is already imported by home-merger.
           ({
             lib,
             inpus,
@@ -59,11 +57,12 @@
             home-merger = {
               users = ["anon"];
               extraSpecialArgs = {inherit inputs;};
-
               # You can use default import or the recursive one (umport).
+              imports = [
+                inputs.nur.modules.homeManager.default
+              ];
               umports.paths = [
                 ./.
-                inputs.nur.modules.homeManager.default
               ];
             };
           })

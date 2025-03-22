@@ -155,8 +155,7 @@ Home-merger is a wrapper around home-manager that you can call multiple times.
 home-merger = {
   users = ["alice"];
   umports.paths = [
-      inputs.anOtherModule.homeManagerModules.default
-      ./alice_modules
+    ./alice_modules
   ];
 };
 ```
@@ -165,9 +164,11 @@ home-merger = {
 # file_2.nix
 home-merger = {
   users = ["bob"];
+  imports = [
+    inputs.anOtherModule.homeManagerModules.default
+  ];
   umports.paths = [
-      inputs.anOtherModule.homeManagerModules.default
-      ./bob_modules
+    ./bob_modules
   ];
 };
 ```
@@ -207,9 +208,9 @@ Use `inputs.nixos-tidy.nixosModules.allow-unfree`
 ```nix
 #default.nix
 allow-unfree = [
-    # use regexes
-    "nvidia-.*"
-    "cuda.*"
+  # use regexes
+  "nvidia-.*"
+  "cuda.*"
 ];
 ```
 

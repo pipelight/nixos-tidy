@@ -53,11 +53,14 @@
             };
 
             imports =
-              []
-              # Import all nixos modules recursively
+              [
+                inputs.home-manager.nixosModules.home-manager
+              ]
+              /*
+              Import all nixos modules recursively
+              */
               ++ slib.umportNixModules {
                 paths = [
-                  inputs.nixos-tidy.nixosModules.home-merger
                   ./.
                 ];
                 exclude = [
@@ -67,20 +70,28 @@
                   ./flake.nix
                 ];
               }
-              # Import all home-manager modules recursively
-              # Uses home-merger under the hood.
-              ++ slib.umportHomeModules {
+              /*
+              Import all home-manager modules recursively
+              Uses home-merger under the hood.
+              */
+              ++ slib.umportHomeModules
+              # Function's first argument:
+              # Umports parameters
+              {
                 paths = [
-                  inputs.nur.modules.homeManager.default
                   ./.
                 ];
                 exclude = [
                   ./flake.nix
                 ];
               }
+              # Function's second argument:
               # Home-merger options
               {
                 users = ["anon"];
+                imports = [
+                  inputs.nur.modules.homeManager.default
+                ];
               };
           })
           ###################################
