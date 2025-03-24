@@ -10,10 +10,11 @@
 
     ###################################
     ## NixOs-tidy and dependencies
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # home-manager = {
+    #   url = "github:nix-community/home-manager";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
+
     ###################################
     ## Testing
     # NUR - Nix User Repository
@@ -45,8 +46,8 @@
           # as it is already imported by home-merger.
           ({
             lib,
-            inpus,
             config,
+            inputs,
             ...
           }: {
             # Create user if you want.

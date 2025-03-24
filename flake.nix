@@ -4,31 +4,23 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
     flake-utils.url = "github:numtide/flake-utils";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+
+    ###################################
+    ## NixOs-tidy and dependencies
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # Testing
-    lix-unit = {
-      url = "github:adisbladis/lix-unit";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = {
+  outputs = inputs @ {
     self,
+    flake-utils,
+    flake-parts,
     nixpkgs,
     ...
-  } @ inputs: rec {
-    templates = {
-      default = {
-        path = ./templates/umports/default.nix;
-        description = ''
-          Top-level umports for static config generation.
-        '';
-      };
-    };
-
+  }: rec {
     lib = slib;
     slib =
       {}
@@ -42,8 +34,17 @@
         inherit (nixpkgs) lib;
       });
 
+    templates = {
+      default = {
+        path = ./templates/umports/default.nix;
+        description = ''
+          Top-level umports for static config generation.
+        '';
+      };
+    };
+
     nixosModules = {
-      home-merger = ./modules/home-merger/default.nix;
+      home-merger = flake-parts.lib.importApply ./modules/home-merger/default.nix {inherit inputs;};
       allow-unfree = ./modules/allow-unfree/default.nix;
       networking-privacy = ./modules/networking-privacy/default.nix;
     };
