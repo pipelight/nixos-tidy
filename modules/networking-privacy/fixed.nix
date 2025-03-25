@@ -5,9 +5,8 @@
   ...
 }:
 with lib; let
-  slib = import ../../lib/network/default.nix {inherit lib;};
-
   cfg = config.networking.privacy;
+  slib = import ../../lib/network/default.nix {inherit lib;};
 
   # Dns local caching/resolver.
   unboundEnabled = config.services.unbound.enable;
@@ -76,9 +75,9 @@ in
       };
     };
 
-    ##########################
     # You should use either systemd-networkd OR NetworkManager.
 
+    ##########################
     ## system-networkd
     systemd.network.config = ''
       [Network]
@@ -92,6 +91,7 @@ in
       # ens3.macAddress = computed_mac;
     };
 
+    ##########################
     ## NetworkManager
     # https://www.networkmanager.dev/docs/api/latest
     networking.networkmanager = mkIf config.networking.networkmanager.enable {

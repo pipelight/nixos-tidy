@@ -4,9 +4,8 @@
   ...
 }:
 with lib; let
-  slib = import ../../lib/network/default.nix {inherit lib;};
-
   cfg = config.networking.privacy;
+  slib = import ../../lib/network/default.nix {inherit lib;};
 
   # Dns local caching/resolver.
   unboundEnabled = config.services.unbound.enable;

@@ -5,16 +5,10 @@
   lib,
   ...
 }: let
-  cfg = config.crocuda;
+  cfg = config.networking.privacy;
 in
   with lib;
-    mkIf cfg.network.privacy.enable {
-      users.groups = let
-        users = cfg.users;
-      in {
-        networkmanager.members = users;
-      };
-
+    mkIf cfg.enable {
       ##########################
       ## Dns
       # Enable dns local caching instead of resolvd.
@@ -40,6 +34,8 @@ in
 
       networking.firewall = {
         enable = true;
+        # libvirt DHCP compatibility
+        checkReversePath = "loose";
       };
 
       environment.systemPackages = with pkgs; [

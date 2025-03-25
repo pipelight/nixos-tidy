@@ -4,11 +4,11 @@
   ...
 }:
 with lib; let
-  cfg = config.crocuda;
+  cfg = config.networking.privacy;
   nsdEnabled = config.services.nsd.enable;
 in
   # enabled on privacy feature only
-  mkIf cfg.networking.privacy.enable {
+  mkIf cfg.enable {
     services = {
       unbound = {
         settings = {
@@ -35,6 +35,13 @@ in
             ];
           };
           forward-zone = [
+            {
+              name = ".lan";
+              stub-addr = [
+                "192.168.1.1"
+                # "::1"
+              ];
+            }
             {
               name = ".";
               forward-addr = [
