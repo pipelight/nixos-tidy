@@ -41,7 +41,7 @@
           # You may move this module into its own file.
           ({
             lib,
-            inpus,
+            inputs,
             config,
             ...
           }: let

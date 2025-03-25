@@ -115,11 +115,12 @@ can lay in the same directory.
 imports = let
   slib = inputs.nixos-tidy.lib;
 in
-  []
+  [
+    inputs.anOtherFlake.nixosModules.default
+  ]
   # Import all nixos modules recursively
   ++ slib.umportNixModules {
     paths = [
-      inputs.anOtherFlake.nixosModules.default
       ./.
     ];
     exclude = [
@@ -131,12 +132,14 @@ in
   }
   ++ slib.umportHomeModules {
     paths = [
-      inputs.nur.modules.homeManager.default
       ./.
     ];
   }
   # Home-merger options
   {
+    imports = [
+      inputs.nur.modules.homeManager.default
+    ];
     users = ["anon"];
   };
 ```

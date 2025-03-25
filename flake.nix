@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
-    flake-utils.url = "github:numtide/flake-utils";
+    # flake-utils.url = "github:numtide/flake-utils";
     flake-parts.url = "github:hercules-ci/flake-parts";
 
     ###################################
@@ -14,13 +14,12 @@
     };
   };
 
-  outputs = inputs @ {
+  outputs = {
     self,
-    flake-utils,
     flake-parts,
     nixpkgs,
     ...
-  }: rec {
+  } @ inputs: rec {
     lib = slib;
     slib =
       {}
@@ -45,6 +44,7 @@
 
     nixosModules = {
       home-merger = flake-parts.lib.importApply ./modules/home-merger/default.nix {inherit inputs;};
+      # home-merger = ./modules/home-merger/default.nix;
       allow-unfree = ./modules/allow-unfree/default.nix;
       networking-privacy = ./modules/networking-privacy/default.nix;
     };
