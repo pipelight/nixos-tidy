@@ -62,8 +62,12 @@
   */
   imports = [
     # Set a fixed inbound ipv6 + random outbounds
+    ./common.nix
     ./fixed.nix
     # Set random ipv6 inbound/outbound
     ./random.nix
+
+    # Dns resolver
+    ./dns/unbound.nix
   ];
 }

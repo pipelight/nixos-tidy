@@ -44,7 +44,6 @@
 
     nixosModules = {
       home-merger = flake-parts.lib.importApply ./modules/home-merger/default.nix {inherit inputs;};
-      # home-merger = ./modules/home-merger/default.nix;
       allow-unfree = ./modules/allow-unfree/default.nix;
       networking-privacy = ./modules/networking-privacy/default.nix;
     };

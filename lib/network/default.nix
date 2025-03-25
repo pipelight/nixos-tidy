@@ -1,5 +1,8 @@
 {lib, ...}:
 with lib; let
+  _rand_uuid = builtins.readFile /proc/sys/kernel/random/uuid;
+  random_mac = str_to_mac _rand_uuid;
+
   ## Functions
   # Generate a 128bits hash from a secret
   _str_to_hash = string:
@@ -47,7 +50,9 @@ with lib; let
 in rec {
   inherit _str_to_hash;
 
+  inherit random_mac;
   inherit str_to_mac;
+
   inherit str_to_ipv6;
   inherit str_to_iid;
 }
