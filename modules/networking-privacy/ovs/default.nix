@@ -2,13 +2,32 @@
   config,
   lib,
   utils,
+  pkgs,
+  ...
 }:
 with lib;
 with utils; let
   cfg = config.networking;
   interfaces = attrValues cfg.interfaces;
 in {
-  systemd.services = let
+  config.systemd.services = let
+    subsystemDevice = interface: "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
+    deviceDependency = dev:
+    # Use systemd service if we manage device creation, else
+    # trust udev when not in a container
+      if (dev == null || dev == "lo")
+      then []
+      else if
+        (hasAttr dev (filterAttrs (k: v: v.virtual) cfg.interfaces))
+        || (hasAttr dev cfg.bridges)
+        || (hasAttr dev cfg.bonds)
+        || (hasAttr dev cfg.macvlans)
+        || (hasAttr dev cfg.sits)
+        || (hasAttr dev cfg.vlans)
+        || (hasAttr dev cfg.greTunnels)
+        || (hasAttr dev cfg.vswitches)
+      then ["${dev}-netdev.service"]
+      else optional (!config.boot.isContainer) (subsystemDevice dev);
     createVswitchDevice = n: v:
       nameValuePair "${n}-netdev"
       (let
@@ -29,12 +48,7 @@ in {
         serviceConfig.Type = "oneshot";
         serviceConfig.RemainAfterExit = true;
         path = [pkgs.iproute2 config.virtualisation.vswitch.package];
-        preStart = ''
-          echo "Resetting Open vSwitch ${n}..."
-          ovs-vsctl --if-exists del-br ${n} -- add-br ${n} \
-                    -- set bridge ${n} protocols=${concatStringsSep "," v.supportedOpenFlowVersions}
-        '';
-        script = ''
+        script = mkForce ''
           echo "Configuring Open vSwitch ${n}..."
           ovs-vsctl ${concatStrings (mapAttrsToList (name: config: " -- --may-exist add-port ${n} ${name}" + optionalString (config.vlan != null) " tag=${toString config.vlan}") v.interfaces)} \
             ${concatStrings (mapAttrsToList (name: config: optionalString (config.type != null) " -- set interface ${name} type=${config.type}") v.interfaces)} \
@@ -44,15 +58,6 @@ in {
 
           echo "Adding OpenFlow rules for Open vSwitch ${n}..."
           ovs-ofctl --protocols=${v.openFlowVersion} add-flows ${n} ${ofRules}
-        '';
-        postStop = ''
-          echo "Cleaning Open vSwitch ${n}"
-          echo "Shutting down internal ${n} interface"
-          ip link set dev ${n} down || true
-          echo "Deleting flows for ${n}"
-          ovs-ofctl --protocols=${v.openFlowVersion} del-flows ${n} || true
-          echo "Deleting Open vSwitch ${n}"
-          ovs-vsctl --if-exists del-br ${n} || true
         '';
       });
   in
@@ -83,8 +88,8 @@ in {
       };
     };
   in {
-    virtualisation.vswitch = mkIf (cfg.vswitches != {}) {enable = true;};
-    networking.interfaces.vswitches = mkOption {
+    config.virtualisation.vswitch = mkIf (cfg.vswitches != {}) {enable = true;};
+    config.networking.interfaces.vswitches = mkOption {
       default = {};
       example = {
         vs0.interfaces = {
