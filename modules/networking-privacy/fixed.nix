@@ -1,5 +1,4 @@
 {
-  inputs,
   config,
   lib,
   ...
@@ -17,15 +16,12 @@ with lib; let
   computed_mac = slib.str_to_mac cfg.network.privacy.ipv6.secret;
 
   # Interface identifier
-  # From static
-  iid = cfg.ipv6.iid;
-  # From secret
-  computed_iid = slib.str_to_iid cfg.ipv6.secret;
-
   token =
-    if (!isNull iid)
-    then iid
-    else computed_iid;
+    if (!isNull cfg.ipv6.iid)
+    then cfg.ipv6.iid
+    else if (!isNull cfg.ipv6.secret)
+    then slib.str_to_iid cfg.ipv6.secret
+    else slib.str_to_iid config.networking.hostName;
 in
   mkIf (cfg.enable
     && cfg.ipv6.strategy

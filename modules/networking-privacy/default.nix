@@ -68,11 +68,7 @@
     # Set random ipv6 inbound/outbound
     ./random.nix
 
-    # Dns resolver
-    # ./dns/unbound.nix
-    # ./dns/nsd.nix
-
     # vswitch temporary fix
-    ./ovs/default.nix
+    # ./ovs/default.nix
   ];
 }
