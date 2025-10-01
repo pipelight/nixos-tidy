@@ -1,5 +1,6 @@
 {lib}: let
-  userAddMany = user_list: {
+  # Creates normal unpriviledged users from a provided list of names.
+  user_add_many = user_list: {
     users.users =
       {}
       // builtins.listToAttrs (
@@ -12,7 +13,7 @@
         user_list
       );
   };
-  userAddMany_system = user_list: {
+  system_user_add_many = user_list: {
     users.users =
       {}
       // builtins.listToAttrs (
@@ -26,7 +27,7 @@
       );
   };
 
-  add_users_to_groups = user_list: group_list: {
+  groups_add_users = group_list: user_list: {
     users.groups =
       {}
       // builtins.listToAttrs (
@@ -40,7 +41,7 @@
       );
   };
 
-  ensureUsers = cfg: users: let
+  ensure_users = cfg: users: let
     mustCreate =
       builtins.filter
       (
@@ -52,10 +53,10 @@
       )
       users;
   in
-    userAddMany mustCreate;
+    user_add_many mustCreate;
 in {
-  inherit userAddMany;
-  inherit userAddMany_system;
-  inherit add_users_to_groups;
-  inherit ensureUsers;
+  inherit user_add_many;
+  inherit system_user_add_many;
+  inherit groups_add_users;
+  inherit ensure_users;
 }

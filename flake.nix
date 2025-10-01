@@ -10,7 +10,6 @@
     ## NixOs-tidy and dependencies
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -31,7 +30,17 @@
       })
       // (import ./lib/network {
         inherit (nixpkgs) lib;
-      });
+      })
+      // {
+        dns = import ./dns/zones.nix {
+          inherit (nixpkgs) lib;
+        };
+      }
+      // {
+        hugepages = import ./hugepages/default.nix {
+          inherit (nixpkgs) lib;
+        };
+      };
 
     templates = {
       default = {

@@ -5,7 +5,7 @@
 }:
 with slib; {
   testMkUser = {
-    expr = userAddMany ["alice" "bob"];
+    expr = user_add_many ["alice" "bob"];
     expected = {
       users.users = {
         alice = {
@@ -18,7 +18,7 @@ with slib; {
     };
   };
   testMkSystemUser = {
-    expr = userAddMany_system ["alice" "bob"];
+    expr = system_user_add_many ["alice" "bob"];
     expected = {
       users.users = {
         alice = {
@@ -31,14 +31,14 @@ with slib; {
     };
   };
   testAddUserToGroup = {
-    expr = add_users_to_groups ["alice" "bob"] ["wheel" "audio"];
+    expr = groups_add_users ["wheel" "audio"] ["alice" "bob"];
     expected = {
       users.groups.wheel.members = ["alice" "bob"];
       users.groups.audio.members = ["alice" "bob"];
     };
   };
   testEnsureUsers = {
-    expr = ensureUsers {
+    expr = ensure_users {
       users.users = {
         anon = {
           isNormalUser = true;

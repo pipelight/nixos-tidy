@@ -249,7 +249,7 @@ Features:
   Return a list of every test files from paths.
 
   ```nix
-  import = getTestModules { paths = [./.]}
+  imports = getTestModules { paths = [./.]}
   ````
   */
   umportTestModules = getTestModules;
