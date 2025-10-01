@@ -9,7 +9,7 @@
     ###################################
     ## NixOs-tidy and dependencies
     home-manager = {
-      url = "github:nix-community/home-manager?ref=release-25.05";
+      url = "github:nix-community/home-manager?ref=master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
