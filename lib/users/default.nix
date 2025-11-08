@@ -1,4 +1,4 @@
-{lib}: let
+{lib, ...}: let
   # Creates normal unpriviledged users from a provided list of names.
   user_add_many = user_list: {
     users.users =
